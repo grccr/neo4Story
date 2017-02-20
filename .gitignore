@@ -1,0 +1,9 @@
+**/node_modules
+**/build.js
+**/.idea
+.idea
+**.iml
+**/config.json
+**/.DS_Store
+.DS_Store
+**/config.js
