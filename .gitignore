@@ -3,7 +3,6 @@
 **/.idea
 .idea
 **.iml
-**/config.json
+public/config.js
 **/.DS_Store
 .DS_Store
-**/config.js
