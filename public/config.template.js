@@ -4,14 +4,20 @@
 
 'use strict';
 
-//noinspection BadExpressionStatementJS
+const editControls = {       // use const to choose some props
+    INPUT: 'input',
+    SELECT: 'select',
+    DATEPICKER: 'datepicker',
+    RANGE: 'range'
+};
+
 module.exports = {
     neo4jConfig: {
         neo4jUrl: 'bolt://localhost',
         neo4jLogin: 'neo4j',
         neo4jPassword: 'P@ssw0rd'
     },
-    nodeTypesConfig: [
+    nodeTypes: [
         {
             name: 'Person',              // machine name of node type
             value: 'Person',             // human name of node type
@@ -20,7 +26,7 @@ module.exports = {
                     name: 'name',        // machine name of field - required!
                     alias: 'Name',       // human name of field - required!
                     type: String,        // field type - String, Num, Boolean. Default: String
-                    editControl: 'input',    // edit field UI control - input, select, range, datapicker. Default: 'input'
+                    editControl: editControls.INPUT,    // edit field UI control  Default: 'input'
                     required: false,         // required in create/edit process, Default - false
                     placeholder: 'person name'     // placeholder of editControl
                 },
@@ -93,7 +99,7 @@ module.exports = {
             ],
             subLabelField: 'inn'
         }],
-    edgesConfig: [
+    edgeTypes: [
         {
             value: 'Friends',
             name: 'Friends',
@@ -120,69 +126,6 @@ module.exports = {
         // {value: 'Employe', name: 'Employe', oriented: false, allowedLinks: {'Person': 'Company'}},
         // {value: 'HostCompany', name: 'Компания HostCompany', oriented: true, allowedLinks: {'Company': 'Company'}},
         // {value: 'TrustCompany', name: 'TrustCompany Компания', oriented: true, allowedLinks: {'Company': 'Company'}}
-    ]
-
-
-
-};
-'use strict';
-
-// ppTypes: [{value: 'friends', name: 'Друзья', oriented: false}, {value: 'collegue', name: 'Коллеги', oriented: false}],
-//     pcTypes: [{value: 'host', name: 'Учредитель', oriented: false}, {value: 'client', name: 'Клиент', oriented: false}],
-//     ccTypes: [{value: 'child', name: 'Дочка', oriented: true}]       // oriented type! todo coloring of oriented types
-
-module.exports = {
-    neo4jConfig: {
-        neo4jUrl: 'bolt://localhost',
-        neo4jLogin: 'neo4j',
-        neo4jPassword: 'P@ssw0rd'
-    },
-    nodesConfig: [
-        {
-            name: 'Person',
-            value: 'Person',
-            fields: [
-                {
-                    name: 'name',
-                    alias: 'Name',
-                    type: String
-                },
-                {
-                    name: 'surname',
-                    alias: 'Surname',
-                    type: String
-                },
-                {
-                    name: 'workplace',
-                    alias: 'Work',
-                    type: String
-                },
-
-            ],
-            mainLabelField: 'name',
-            extraMainLabelFields: ['surname'],
-            subLabelField: 'workplace',
-            pages: [
-                {
-                    title: 'Personal'
-                }
-            ]
-        },
-        {
-            value: 'Company',
-            name: 'Company'
-        },
-        {
-            value: 'RegistryOrganization',
-            name: 'Registry Organization'
-        }],
-    edgesConfig: [
-        {value: 'Friends', name: 'Friends', oriented: false, allowedLinks: {'Person': 'Person'}},
-        {value: 'Colleagues', name: 'Colleagues', oriented: false, allowedLinks: {'Person': 'Person'}},
-        {value: 'Host', name: 'Host', oriented: false, allowedLinks: {'Person': 'Company'}},
-        {value: 'Employe', name: 'Employe', oriented: false, allowedLinks: {'Person': 'Company'}},
-        {value: 'HostCompany', name: 'Компания HostCompany', oriented: true, allowedLinks: {'Company': 'Company'}},
-        {value: 'TrustCompany', name: 'TrustCompany Компания', oriented: true, allowedLinks: {'Company': 'Company'}}
     ]
 
 

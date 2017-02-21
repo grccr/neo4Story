@@ -112,4 +112,20 @@ describe('configValidation', () => {
         expect(validationResult.success).to.be.true;
     });
 
+    it('validateNodeTypesConfig10 - editControl in types', () => {
+        const nodeTypesSample = [{
+            name: 'Test',
+            value: 'test',
+            fields: [{
+                name: 'name',
+                alias: 'name',
+                required: true,
+                editControl: 'something_very_wrong'
+            }],
+            mainLabelField: 'name'
+        }];
+        let validationResult = configValidator.validateNodeTypes(nodeTypesSample);
+        expect(validationResult.success).to.be.false;
+    });
+
 });

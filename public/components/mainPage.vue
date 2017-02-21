@@ -42,7 +42,8 @@
             ...mapActions({
                 neo4jConfigSet: "neo4jConfigSet",
                 graphConfigSet: "graphConfigSet",
-				setNodeTypesConfig: 'setNodeTypesConfig'
+				setNodeTypesConfig: 'setNodeTypesConfig',
+				setEdgeTypesConfig: 'setEdgeTypesConfig'
             })
 		},
         created () {
@@ -51,12 +52,9 @@
 				console.log(config);
             	this.neo4jConfigSet(config);
             	this.graphConfigSet(config);
-				this.setNodeTypesConfig(config.nodeTypesConfig);
-
-
-            }, (response) => {})
-
-
+				this.setNodeTypesConfig(config.nodeTypes);
+				this.setEdgeTypesConfig(config.edgeTypes);
+            }, (response) => {});
         }
 
 	}
