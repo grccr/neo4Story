@@ -246,26 +246,15 @@ module.exports = {
 
         },
         neo4jCreatePerson (store, data) {
-            // console.log(data);
             let neo4j = window.neo4j.v1;
             let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
                 store.state.neo4jPassword));
             let session = driver.session();
 
-            let name = data.name;
-            let surname = data.surname;
-            let workplace = data.workplace;
-            let birthdate = data.birthdate;
-            let description = data.description;
-            let facebook = data.facebook;
-
-            console.log(data);
-
             return session
                 .run(
-                    "CREATE (a:Person {name: {name}, surname: {surname}, workplace: {workplace}, " +
-                    "description: {description}, birthdate: {birthdate}, facebook:{facebook}}) RETURN a",
-                    {name, surname, workplace, description, birthdate, facebook}
+                    "CREATE (a:Person {data}) RETURN a",
+                    {data: data}
                 )
                 .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
                 .catch(error => {
@@ -275,7 +264,6 @@ module.exports = {
 
         },
         neo4jCreateCompany (store, data) {
-            // console.log(data);
             let neo4j = window.neo4j.v1;
             let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
                 store.state.neo4jPassword));
