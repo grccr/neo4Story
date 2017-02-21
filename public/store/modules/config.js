@@ -25,7 +25,7 @@ module.exports = {
         setNodeTypesConfig(store, nodeTypes) {
             store.commit('SET_NODE_TYPES_CONFIGURATION', nodeTypes);
         },
-        setEdgeTypesConfig() {
+        setEdgeTypesConfig(store, edgeTypes) {
             store.commit('SET_EDGE_TYPES_CONFIGURATION', edgeTypes);
         }
     },

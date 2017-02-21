@@ -11,7 +11,6 @@ const editControls = {       // use const to choose some props
     RANGE: 'range'
 };
 
-//noinspection BadExpressionStatementJS
 module.exports = {
     neo4jConfig: {
         neo4jUrl: 'bolt://localhost',

@@ -9,7 +9,7 @@ let configValidator = require('../configValidator');
 
 describe('configPreparation', () => {
 
-    it('prepareNodeTypes1', () => {
+    it('prepareNodeTypes1 - common case', () => {
         const nodeTypesSample = [{
             name: 'Test',
             value: 'test',

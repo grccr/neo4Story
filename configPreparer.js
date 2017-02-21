@@ -6,7 +6,7 @@ module.exports = {
     prepareNodeTypes (nodeTypes) {
         nodeTypes.forEach((type) => {
 
-            type.fields.map((field) => {
+            type.fields.forEach((field) => {
                 if(!field.required) field.required = false; // direct false definition to escape undefined
                 if(!field.editControl) field.editControl = 'input';
                 if(!field.type) field.type = String;

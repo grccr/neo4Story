@@ -2,9 +2,6 @@
 
 ### *Let your neo4j graph data sing in this web-app!*
 
-**Build status:**
-
-
 ### What is neo4Story?
 
 **neo4Story** is js-based web-app for browsing and editing neo4j data.
