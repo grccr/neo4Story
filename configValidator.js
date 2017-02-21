@@ -2,8 +2,11 @@
  * Created by forwardmomentum on 21.02.17.
  */
 
+const validEditControls = ['input', 'select', 'datepicker', 'range'];
+
 module.exports = {
     validateNodeTypes: (nodeTypes) => {
+
         if (!nodeTypes) return {success: false, message: 'node types undefined!'};
         if (nodeTypes.length == 0) return {success: false, message: 'empty node types list!'};
         for (let typeIndex in nodeTypes) {
@@ -47,6 +50,12 @@ module.exports = {
 
             if(!type.fields.map((field) => { return field.name; }).includes(type.mainLabelField))
                 return { success: false, message: 'type ' + type.name + ' has mainLabelField not from fields of this type!'};
+
+            if(type.fields.filter((field) => {
+                    if (!field.editControl) return false;
+                    return !validEditControls.includes(field.editControl)
+                }).length > 0)
+                return { success: false, message: 'type ' + type.name + ' has field with not valid editControl!'};
 
         }
         return {success: true};

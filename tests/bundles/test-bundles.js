@@ -162,6 +162,22 @@
 	        var validationResult = configValidator.validateNodeTypes(nodeTypesSample);
 	        (0, _chai.expect)(validationResult.success).to.be.true;
 	    });
+
+	    it('validateNodeTypesConfig10 - editControl in types', function () {
+	        var nodeTypesSample = [{
+	            name: 'Test',
+	            value: 'test',
+	            fields: [{
+	                name: 'name',
+	                alias: 'name',
+	                required: true,
+	                editControl: 'something_very_wrong'
+	            }],
+	            mainLabelField: 'name'
+	        }];
+	        var validationResult = configValidator.validateNodeTypes(nodeTypesSample);
+	        (0, _chai.expect)(validationResult.success).to.be.false;
+	    });
 	});
 
 /***/ },
@@ -8480,8 +8496,11 @@
 	 * Created by forwardmomentum on 21.02.17.
 	 */
 
+	var validEditControls = ['input', 'select', 'datepicker', 'range'];
+
 	module.exports = {
 	    validateNodeTypes: function validateNodeTypes(nodeTypes) {
+
 	        if (!nodeTypes) return { success: false, message: 'node types undefined!' };
 	        if (nodeTypes.length == 0) return { success: false, message: 'empty node types list!' };
 	        for (var typeIndex in nodeTypes) {
@@ -8522,6 +8541,11 @@
 	            if (!type.fields.map(function (field) {
 	                return field.name;
 	            }).includes(type.mainLabelField)) return { success: false, message: 'type ' + type.name + ' has mainLabelField not from fields of this type!' };
+
+	            if (type.fields.filter(function (field) {
+	                if (!field.editControl) return false;
+	                return !validEditControls.includes(field.editControl);
+	            }).length > 0) return { success: false, message: 'type ' + type.name + ' has field with not valid editControl!' };
 	        }
 	        return { success: true };
 	    },
@@ -8555,12 +8579,17 @@
 	                name: 'name',
 	                alias: 'name',
 	                required: true
+	            }, {
+	                name: 'surname',
+	                alias: 'Surname'
 	            }],
 	            mainLabelField: 'name'
 	        }];
 	        var preparedNodeTypes = configPreparer.prepareNodeTypes(nodeTypesSample);
 	        (0, _chai.expect)(configValidator.validateNodeTypes(preparedNodeTypes).success).to.be.true; // check that valid config is still valid
-	        // expect(preparedNodeTypes.fields[0х).success).to.be.true;
+	        (0, _chai.expect)(preparedNodeTypes[0].fields[0].editControl).to.equal('input');
+	        (0, _chai.expect)(preparedNodeTypes[0].fields[0].type).to.equal(String);
+	        (0, _chai.expect)(preparedNodeTypes[0].fields[1].required).to.equal(false);
 	    });
 	});
 
@@ -8568,7 +8597,7 @@
 /* 44 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	/**
 	 * Created by forwardmomentum on 21.02.17.
@@ -8576,6 +8605,14 @@
 
 	module.exports = {
 	    prepareNodeTypes: function prepareNodeTypes(nodeTypes) {
+	        nodeTypes.forEach(function (type) {
+
+	            type.fields.map(function (field) {
+	                if (!field.required) field.required = false; // direct false definition to escape undefined
+	                if (!field.editControl) field.editControl = 'input';
+	                if (!field.type) field.type = String;
+	            });
+	        });
 	        return nodeTypes;
 	    },
 	    prepareEdgeTypes: function prepareEdgeTypes(edgeTypes) {
