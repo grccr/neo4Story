@@ -152,7 +152,6 @@
 	            mainLabelField: 'name'
 	        }];
 	        var validationResult = configValidator.validateNodeTypes(nodeTypesSample);
-	        console.log(validationResult);
 	        (0, _chai.expect)(validationResult.success).to.be.true;
 	    });
 	});
