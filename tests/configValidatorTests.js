@@ -97,7 +97,7 @@ describe('configValidation', () => {
         expect(validationResult.success).to.be.false;
     });
 
-    it('validateNodeTypesConfig9', () => {
+    it('validateNodeTypesConfig9 - valid config', () => {
         const nodeTypesSample = [{
             name: 'Test',
             value: 'test',
@@ -106,7 +106,8 @@ describe('configValidation', () => {
                 alias: 'name',
                 required: true
             }],
-            mainLabelField: 'name'
+            mainLabelField: 'name',
+            searchFields: ['name']
         }];
         let validationResult = configValidator.validateNodeTypes(nodeTypesSample);
         expect(validationResult.success).to.be.true;
@@ -122,6 +123,22 @@ describe('configValidation', () => {
                 required: true,
                 editControl: 'something_very_wrong'
             }],
+            mainLabelField: 'name'
+        }];
+        let validationResult = configValidator.validateNodeTypes(nodeTypesSample);
+        expect(validationResult.success).to.be.false;
+    });
+
+    it('validateNodeTypesConfig11 - searchFields in fields', () => {
+        const nodeTypesSample = [{
+            name: 'Test',
+            value: 'test',
+            fields: [{
+                name: 'name',
+                alias: 'name',
+                required: true
+            }],
+            searchFields: ['surname'],
             mainLabelField: 'name'
         }];
         let validationResult = configValidator.validateNodeTypes(nodeTypesSample);

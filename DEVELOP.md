@@ -16,6 +16,10 @@ Now neo4Story is very raw and unstable tool, which has no server in fact. But th
 
 todo
 
+#### 5. Build
+
+todo
+
 #### 5. Links
 
 - [VueJS](https://vuejs.org/) great component js framework 
