@@ -1,7 +1,6 @@
 <template>
     <div class="info-panel">
-        <person-card :information="information" v-if="information.semantic_type == 'Person'"></person-card>
-        <company-card :information="information" v-if="information.semantic_type == 'Company'"></company-card>
+        <node-card :information="information"></node-card>
     </div>
 </template>
 
@@ -12,8 +11,9 @@
             return {}
         },
         components: {
-            personCard: require('./cards/personCard/personCard.vue'),
-            companyCard: require('./cards/companyCard/companyCard.vue')
+            nodeCard: require('./cards/nodeCard/nodeCard.vue'),
+//            personCard: require('./cards/personCard/personCard.vue'),
+//            companyCard: require('./cards/companyCard/companyCard.vue')
         },
         computed: {
             information () {
@@ -23,19 +23,19 @@
             }
         },
         methods: {
-            ...mapActions({
-                exploreNode: "exploreNode",
-                neo4jSearch: "neo4jSearch",
-                selectNodes: 'selectNodes'
-            }),
-            exploreButtonClick () {
-                let selectedIds = this.$store.state.graph.selectedElements;
-                let selectedNodes = this.$store.state.graph.nodes.filter((node) => selectedIds.includes(node.id));
-                let name = selectedNodes[0].name;
-                let surname = selectedNodes[0].surname;
-                this.neo4jSearch({name: name, surname: surname, update: true});
-//                this.exploreNode({name, surname})
-            }
+//            ...mapActions({
+//                exploreNode: "exploreNode",
+//                neo4jSearch: "neo4jSearch",
+//                selectNodes: 'selectNodes'
+//            }),
+//            exploreButtonClick () {
+//                let selectedIds = this.$store.state.graph.selectedElements;
+//                let selectedNodes = this.$store.state.graph.nodes.filter((node) => selectedIds.includes(node.id));
+//                let name = selectedNodes[0].name;
+//                let surname = selectedNodes[0].surname;
+//                this.neo4jSearch({name: name, surname: surname, update: true});
+////                this.exploreNode({name, surname})
+//            }
         }
     }
 </script>

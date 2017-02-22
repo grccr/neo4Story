@@ -4,7 +4,7 @@
          @keydown.up='up'>
         <md-input-container class="search-row-container">
             <label v-if="labelActive" class="search-label">Search</label>
-            <md-input class="search-input" v-model="searchRequest" v-on:blur.native="onBlured" placeholder="Person/company"></md-input>
+            <md-input class="search-input" v-model="searchRequest" v-on:blur.native="onBlured" :placeholder="searchPlaceholder"></md-input>
         </md-input-container>
         <div class="autocomplete-menu md-menu-content md-direction-bottom-right md-active"
              id="autocomplete-container"
@@ -73,7 +73,11 @@
                 type: Object
             }
         },
-        computed: {},
+        computed: {
+            searchPlaceholder () {
+                return this.$store.state.appConfig.config.searchPlaceholder;
+            }
+        },
         methods: {
             ...mapActions({
                 neo4jFullTextSearch: "neo4jFullTextSearch"

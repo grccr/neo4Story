@@ -153,9 +153,6 @@ module.exports = {
         },
         graphLayout(store, payload) {
             store.commit("GRAPH_LAYOUT", payload.layoutFlag);
-        },
-        graphConfigSet(store, payload) {
-            // todo set graph config? maybe should be replaced to config module
         }
 
     },
