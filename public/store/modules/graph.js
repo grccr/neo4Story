@@ -25,12 +25,27 @@ module.exports = {
         ADD_ELEMENT_TO_SELECTION (state, element) {
             let selectedElements = JSON.parse(JSON.stringify(state.selectedElements));
             console.log(selectedElements);
-            element.selected = true;
+            selectedElements.selectedd = true;
             console.log();
             selectedElements.push(element);
+            let tempNodes = [];
+            state.nodes.forEach((node) => {
+                // node.selected = false;
+                if (node.id == element.id){
+                    node.selected = true;
+                }
+                tempNodes.push(node);
+            });
             Vue.set(state, 'selectedElements', selectedElements);
+            Vue.set(state, 'nodes', tempNodes);
         },
         RESET_SELECTION (state) {
+            let tempNodes = [];
+            state.nodes.forEach((node) => {
+                node.selected = false;
+                tempNodes.push(node);
+            });
+            Vue.set(state, 'nodes', tempNodes);
             Vue.set(state, 'selectedElements', []);
         },
         SET_GRAPH(state, graph){
@@ -55,6 +70,7 @@ module.exports = {
 
                 }
                 else {
+                    node.selected = false;
                     tempNodes.push(node);
                     tempNodesMap[node.id] = node;
                 }
