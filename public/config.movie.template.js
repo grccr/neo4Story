@@ -37,14 +37,14 @@ module.exports = {
                 },
                 {
                     name: 'birthplace',
-                    alias: 'Birthday'
+                    alias: 'Birthplace'
                 },
                 {
                     name: 'biography',
                     alias: 'Biography'
                 }
             ],
-            color: 'brown',    // choose from vuematerial colors, default - blue
+            color: 'teal',    // choose from vuematerial colors, default - blue
             nodeIcon: 'person',   // if you want use custom icon for your type (like mysupericon.png) - put it's png to public/img/custom-icons and write 'custom-icons/mysupericon.png'
             cardIcon: 'person',   // choose from material icons set
             mainLabelField: 'name',             // mainLabelField and extraMainLabelFields fills card header, mainLabelField is required
@@ -53,10 +53,12 @@ module.exports = {
             pages: [
                 {
                     title: 'Personal',
+                    icon: 'account_circle',
                     fields: ['birthday', 'birthplace']      // fields presented at this (1) page of card
                 },
                 {
                     title: 'Biography',
+                    icon: 'description',
                     fields: ['biography']
                 }
             ]
@@ -64,40 +66,43 @@ module.exports = {
         {
             value: 'Movie',
             name: 'Movie',
+            cardIcon: 'movie',
             fields: [
                 {
                     name: 'title',
-                    alias: 'title',
+                    alias: 'Title',
                     required: true
                 },
                 {
                     name: 'studio',
-                    alias: 'studio'
+                    alias: 'Studio'
                 },
                 {
                     name: 'description',
-                    alias: 'description'
+                    alias: 'Description'
                 },
                 {
                     name: 'homepage',
-                    alias: 'homepage'
+                    alias: 'Homepage'
                 },
                 {
                     name: 'genre',
-                    alias: 'genre'
+                    alias: 'Genre'
                 },
             ],
+            color: 'brown',
             searchFields: ['title', 'studio'],
             icon: 'factory',
             mainLabelField: 'title',
-            color: 'brown',
             pages: [
                 {
                     title: 'General',
+                    icon: 'description',
                     fields: ['genre', 'homepage']
                 },
                 {
                     title: 'Description',
+                    icon: 'description',
                     fields: ['description']
                 }
             ],

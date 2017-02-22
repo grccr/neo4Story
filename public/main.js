@@ -24,6 +24,12 @@ Vue.material.registerTheme('blue', {
     primary: 'blue',
     accent: 'white'
 });
+
+Vue.material.registerTheme('teal', {
+    primary: 'teal',
+    accent: 'white'
+});
+
 // Vue.material.registerTheme('brown', {
 //     primary: 'brown',
 //     accent: 'white'

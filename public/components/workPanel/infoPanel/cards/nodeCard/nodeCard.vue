@@ -40,14 +40,9 @@
                 </md-card-media>
             </md-card-header>
 
-            <!--<general-details :information="information" :editable="editable" v-if="modeIndex == 0"></general-details>-->
-            <!--<contacts-details :information="information" :editable="editable" v-if="modeIndex == 1"></contacts-details>-->
-            <!--<business-details :information="information" :editable="editable" v-if="modeIndex == 2"></business-details>-->
-            <!--<description-details :information="information" :editable="editable"-->
-                                 <!--v-if="modeIndex == 3"></description-details>-->
-
+            <node-page :information="information" :page="activePage" :editable="editable" :typeConfig="typeConfig"></node-page>
             <md-bottom-bar md-shift @change="switchDetails" :md-theme="typeConfig.color">
-                <md-bottom-bar-item md-icon="account_circle" md-active v-for="(page, index) in typeConfig.pages"></md-bottom-bar-item>
+                <md-bottom-bar-item :md-icon="page.icon" md-active v-for="(page, index) in typeConfig.pages">{{ page.title }}</md-bottom-bar-item>
             </md-bottom-bar>
 
         </md-card>
@@ -60,9 +55,8 @@
     export default{
         data() {
             return {
-                modes: ['general', 'contacts', 'business', 'description'],
-                modeIndex: 0,
-                editable: false
+                editable: false,
+                activePageIndex: 0
             }
         },
         components: {
@@ -74,6 +68,10 @@
                     return type.name == this.information.semantic_type
                 });
                 return match.length > 0 ? match[0] : false;
+            },
+            activePage () {
+                if (this.typeConfig) return this.typeConfig.pages[this.activePageIndex];
+                return false;
             },
             label () {
                 var extra = '';
@@ -104,7 +102,7 @@
                 this.setWorkMode({workMode: 'none'});
             },
             switchDetails (index) {
-                this.modeIndex = index;
+                this.activePageIndex = index;
             },
             exploreNodeClicked(){
                 let selectedElements = this.$store.state.graph.selectedElements;
