@@ -48,7 +48,9 @@ module.exports = {
                 message: 'type with ' + type.name + ' has no mainLabelField!'
             };
 
-            if(!type.fields.map((field) => { return field.name; }).includes(type.mainLabelField))
+            let fieldNames = type.fields.map((field) => { return field.name; });
+
+            if(!fieldNames.includes(type.mainLabelField))
                 return { success: false, message: 'type ' + type.name + ' has mainLabelField not from fields of this type!'};
 
             if(type.fields.filter((field) => {
@@ -56,6 +58,17 @@ module.exports = {
                     return !validEditControls.includes(field.editControl)
                 }).length > 0)
                 return { success: false, message: 'type ' + type.name + ' has field with not valid editControl!'};
+
+            var flag = true;
+            if (type.searchFields) {
+                type.searchFields.forEach((searchField) => {
+                    if(!fieldNames.includes(searchField))
+                        flag = false;
+                });
+            }
+            if(!flag) return { success: false, message: 'type ' + type.name + ' has searchField/s not from fields of this type!'};
+
+            //todo icon validator
 
         }
         return {success: true};
