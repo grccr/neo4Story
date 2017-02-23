@@ -25,6 +25,11 @@ So, if you have graph data (in neo4j-dump, graphml, csv, no matters...), it's si
 
 **neo4Story** can be launched as nodeJS server via command-line (late it will be possible with desktop launcher).
 
+**neo4Story** is in the phase of active growing now, there are many bugs and fields to grow,
+ so every feedback will be very pleasant.
+   
+**Note:** neo4Story uses only match and create queries (so don't worry, **your data will be safe**), but **do not use this app in public or enterprise enviroment**, it is still raw for these purposes.
+
 #### How to prepare machine to neo4Story?
 
 1. Install [nodeJS](https://nodejs.org/en/)
