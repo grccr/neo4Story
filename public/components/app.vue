@@ -1,8 +1,6 @@
 <template>
 	<div class="main">
 		<div class="nav">
-			<!-- <router-link class="link" :to="{ name: 'mainPage' }">MAIN<router-link> -->
-			<!-- <router-link class="link" :to="{ name: 'bPage' }">BRATVA<router-link> -->
 		</div>
 		<router-view></router-view>
 	</div>
