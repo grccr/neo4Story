@@ -90,6 +90,9 @@
             onClickStage(event) {
                 this.resetSelection();
                 this.setWorkMode({workMode: 'none'});
+//                this.sigmaInstance.cameras.cam1.goTo({
+//                    x: 10, y: 10, ratio: 1, angle: 45
+//                });
             }
         },
         mounted () {
@@ -126,11 +129,14 @@
                                     defaultEdgeLabelActiveColor: '#000'
                                 },
                                 renderers: [
-                                    {
-                                        container: document.getElementById('graph-container'),
-                                        type: 'canvas'
-                                    }
+
                                 ]
+                            });
+                            self.sigmaInstance.addCamera('cam1');
+                            self.sigmaInstance.addRenderer({
+                                container: document.getElementById('graph-container'),
+                                type: 'canvas',
+                                camera: 'cam1'
                             });
                             self.sigmaInstance.bind('clickNode', self.onNodeClick);
                             self.sigmaInstance.bind('doubleClickNode', self.onNodeDoubleClick);
