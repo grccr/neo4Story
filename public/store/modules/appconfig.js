@@ -4,7 +4,6 @@
 
 var Vue = require('vue');
 
-
 /**
  * Configuration state management
  */
