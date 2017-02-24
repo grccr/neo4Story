@@ -157,7 +157,7 @@ module.exports = {
             store.commit("GRAPH_LAYOUT", payload.layoutFlag);
         },
         graphConfigSet(store, payload) {
-
+            // todo set graph config? maybe should be replaced to config module
         }
 
     },
