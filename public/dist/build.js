@@ -80,7 +80,7 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("var Vue = __webpack_require__(1);\nvar Vuex = __webpack_require__(7);\n\nVue.use(Vuex);\n\nmodule.exports = new Vuex.Store({\n    strict: true, // turn off on production!\n    modules: {\n    \t// test: require('./modules/test'),\n        graph: __webpack_require__(8),\n        auth: __webpack_require__(9),\n        // addNodeButton: require('./modules/addNode'),\n        neo4j: __webpack_require__(10),\n        edit: __webpack_require__(11),\n        appConfig: __webpack_require__(12)\n    }\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./public/store/index.js\n// module id = 6\n// module chunks = 0\n//# sourceURL=webpack:///./public/store/index.js?");
+	eval("var Vue = __webpack_require__(1);\nvar Vuex = __webpack_require__(7);\n\nVue.use(Vuex);\n\nmodule.exports = new Vuex.Store({\n    strict: true, // turn off on production!\n    modules: {\n    \t// test: require('./modules/test'),\n        graph: __webpack_require__(8),\n        auth: __webpack_require__(9),\n        // addNodeButton: require('./modules/addNode'),\n        neo4j: __webpack_require__(10),\n        edit: __webpack_require__(11),\n        appConfig: __webpack_require__(137)\n    }\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./public/store/index.js\n// module id = 6\n// module chunks = 0\n//# sourceURL=webpack:///./public/store/index.js?");
 
 /***/ },
 /* 7 */
@@ -110,15 +110,10 @@
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("\n'use strict';\n\nvar Vue = __webpack_require__(1);\n\n/**\n * Module for edit tech tools - in workPanel and maybe other\n */\nmodule.exports = {\n    state: {\n        // type for node creation\n        nodeType: \"\",\n        // workMode - info (starts infoPanel), addNode (starts nodeAddPanel), edgeNode (starts edgeAddPanel),\n        workMode: 'none',\n        // selectorNodeActive - flag that can be used to understand switch workMode on nodeClick or not\n        selectorNodeActive: false\n    },\n    mutations: {\n        SWITCH_NODE_TYPE(state, nodeType) {\n            Vue.set(state, 'nodeType', nodeType);\n        },\n        SET_WORK_MODE (state, workMode) {\n            Vue.set(state, 'workMode', workMode);\n        },\n        SET_SELECTOR_NODE_ACTIVE (state, selectorNodeActive) {\n            Vue.set(state, 'selectorNodeActive', selectorNodeActive);\n        }\n    },\n    actions: {\n        switchNodeType(store, nodeType){\n            store.commit(\"SWITCH_NODE_TYPE\", nodeType);\n        },\n        setWorkMode (store, payload) {\n            store.commit('SET_WORK_MODE', payload.workMode);\n        },\n        setSelectorNodeActive (store, selectorNodeActive) {\n            store.commit('SET_SELECTOR_NODE_ACTIVE', selectorNodeActive);\n        }\n    },\n    getters: {}\n};\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./public/store/modules/edit.js\n// module id = 11\n// module chunks = 0\n//# sourceURL=webpack:///./public/store/modules/edit.js?");
+	eval("var Vue = __webpack_require__(1);\n\n/**\n * Module for edit tech tools - in workPanel and maybe other\n */\nmodule.exports = {\n    state: {\n        // type for node creation\n        nodeType: \"\",\n        // workMode - info (starts infoPanel), addNode (starts nodeAddPanel), edgeNode (starts edgeAddPanel),\n        workMode: 'none',\n        // selectorNodeActive - flag that can be used to understand switch workMode on nodeClick or not\n        selectorNodeActive: false\n    },\n    mutations: {\n        SWITCH_NODE_TYPE(state, nodeType) {\n            Vue.set(state, 'nodeType', nodeType);\n        },\n        SET_WORK_MODE (state, workMode) {\n            Vue.set(state, 'workMode', workMode);\n        },\n        SET_SELECTOR_NODE_ACTIVE (state, selectorNodeActive) {\n            Vue.set(state, 'selectorNodeActive', selectorNodeActive);\n        }\n    },\n    actions: {\n        switchNodeType(store, nodeType){\n            store.commit(\"SWITCH_NODE_TYPE\", nodeType);\n        },\n        setWorkMode (store, payload) {\n            store.commit('SET_WORK_MODE', payload.workMode);\n        },\n        setSelectorNodeActive (store, selectorNodeActive) {\n            store.commit('SET_SELECTOR_NODE_ACTIVE', selectorNodeActive);\n        }\n    },\n    getters: {}\n};\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./public/store/modules/edit.js\n// module id = 11\n// module chunks = 0\n//# sourceURL=webpack:///./public/store/modules/edit.js?");
 
 /***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	eval("/**\n * Created by forwardmomentum, 20.02.17.\n */\n\nvar Vue = __webpack_require__(1);\n\n\n/**\n * Configuration state management\n */\nmodule.exports = {\n    state: {\n        config: {}\n    },\n    mutations: {\n        SET_APP_CONFIG(state, config) {\n            Vue.set(state, 'config', config);\n        }\n    },\n    actions: {\n        setAppConfig(store, appConfig) {\n            store.commit('SET_APP_CONFIG', appConfig);\n        }\n    },\n    getters: {}\n};\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./public/store/modules/config.js\n// module id = 12\n// module chunks = 0\n//# sourceURL=webpack:///./public/store/modules/config.js?");
-
-/***/ },
+/* 12 */,
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -861,6 +856,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	eval("module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;\n  return _c('div', {\n    staticClass: \"main\"\n  }, [_c('div', {\n    staticClass: \"nav\"\n  }), _vm._v(\" \"), _c('router-view')], 1)\n},staticRenderFns: []}\nif (false) {\n  module.hot.accept()\n  if (module.hot.data) {\n     require(\"vue-hot-reload-api\").rerender(\"data-v-b6ff6144\", module.exports)\n  }\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/vue-loader/lib/template-compiler.js?id=data-v-b6ff6144!./~/vue-loader/lib/selector.js?type=template&index=0!./public/components/app.vue\n// module id = 136\n// module chunks = 0\n//# sourceURL=webpack:///./public/components/app.vue?./~/vue-loader/lib/template-compiler.js?id=data-v-b6ff6144!./~/vue-loader/lib/selector.js?type=template&index=0");
+
+/***/ },
+/* 137 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("/**\n * Created by forwardmomentum, 20.02.17.\n */\n\nvar Vue = __webpack_require__(1);\n\n/**\n * Configuration state management\n */\nmodule.exports = {\n    state: {\n        config: {}\n    },\n    mutations: {\n        SET_APP_CONFIG(state, config) {\n            Vue.set(state, 'config', config);\n        }\n    },\n    actions: {\n        setAppConfig(store, appConfig) {\n            store.commit('SET_APP_CONFIG', appConfig);\n        }\n    },\n    getters: {}\n};\n\n\n//////////////////\n// WEBPACK FOOTER\n// ./public/store/modules/appconfig.js\n// module id = 137\n// module chunks = 0\n//# sourceURL=webpack:///./public/store/modules/appconfig.js?");
 
 /***/ }
 /******/ ]);
