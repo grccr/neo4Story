@@ -56,7 +56,11 @@ module.exports = {
             Vue.set(state, "neo4jPassword", payload.neo4jConfig.neo4jPassword);
         }
     },
-    getters: {},
+    getters: {
+        appConfig(state, getters, rootState, rootGetters) {
+            return rootState.appConfig.config;
+        }
+    },
     actions: {
         neo4jConfigSet (store, payload) {
             store.commit('SET_NEO4J_CONFIG', payload);
@@ -70,7 +74,6 @@ module.exports = {
              * }
              * @return Promise
              */
-            console.log(payload);
             let neo4j = window.neo4j.v1;
             let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
                 store.state.neo4jPassword));
@@ -188,10 +191,16 @@ module.exports = {
                 edgesMap: {}
             };
             let neo4jData = payload.neo4jData;
-            let nodeConfig = payload.nodeConfig;
-            let edgeConfig = payload.edgeConfig;
-            let colorPerson = colorBrewPerson[Math.round(Math.random() * colorBrewPerson.length)];
-            let colorCompany = colorBrewCompany[Math.round(Math.random() * colorBrewCompany.length)];
+            let nodeTypes = store.getters.appConfig.nodeTypes;
+            let edgeTypes = store.getters.appConfig.edgeTypes;
+
+            let colors = {};
+            nodeTypes.forEach((type, i) => {
+                if (i % 2 == 0)
+                    colors[type.name] = colorBrewPerson[Math.round(Math.random() * colorBrewPerson.length)];
+                else
+                    colors[type.name] = colorBrewCompany[Math.round(Math.random() * colorBrewCompany.length)];
+            });
             neo4jData.records.forEach(res => {
                 res._fields.forEach(field => {
                     if (field) {
@@ -201,22 +210,36 @@ module.exports = {
                             if (!(nodeData.id in graph.nodesMap)) {
                                 graph.nodesMap[nodeData.id] = nodeData;
                                 nodeData.semantic_type = field.labels[0];
+                                let match = nodeTypes.filter((type) => {
+                                    return type.name == nodeData.semantic_type
+                                });
+                                let typeConfig = match[0];
+
+                                var extra = '';
+                                if(typeConfig.extraMainLabelFields)
+                                    typeConfig.extraMainLabelFields.forEach((extraField) => {
+                                        if (nodeData[extraField])
+                                            extra += nodeData[extraField] + ' ';
+                                    });
+                                if (extra) extra = extra.slice(0, -1);
+
+
+                                nodeData.label = nodeData[typeConfig.mainLabelField] + ' ' + extra;
+                                nodeData.sublabel = '';
+                                nodeData.sublabel = typeConfig.subLabelField ? nodeData[typeConfig.subLabelField] : '';
+
                                 nodeData.x = Math.random() * 0.5;
                                 nodeData.y = Math.random() * 0.5;
                                 nodeData.image = 'img/pig.png'; // default for fast detecting
-                                if (nodeData.semantic_type == "Person") {
-                                    nodeData.image = 'img/person.png';
-                                    nodeData.color = colorPerson;
-                                }
-                                if (nodeData.semantic_type == "Company") {
-                                    nodeData.image = 'img/factory.png';
-                                    nodeData.color = colorCompany;
-                                }
+
+                                nodeData.image = 'img/' + typeConfig.nodeIcon + '.png';
+
+                                nodeData.color = colors[typeConfig.name];
+
                                 nodeData.size = 10;
                                 nodeData.hoverBorderColor = nodeData.color;
                                 nodeData.type = 'image';
 
-                                nodeData.label = (nodeData.name || '') + ' ' + (nodeData.surname || '');
                                 graph.nodes.push(nodeData);
                             }
                         }
