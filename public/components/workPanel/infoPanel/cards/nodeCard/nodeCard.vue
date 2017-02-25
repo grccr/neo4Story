@@ -93,12 +93,12 @@
             ...mapActions({
                 exploreNode: "exploreNode",
                 neo4jSearchById: "neo4jSearchById",
-                selectNodes: 'selectNodes',
                 addSubGraphById: 'addSubGraphById',
-                setWorkMode: 'setWorkMode'
+                setWorkMode: 'setWorkMode',
+                resetSelection: 'resetSelection'
             }),
             closeButtonClick () {
-                this.selectNodes([]);
+                this.resetSelection();
                 this.setWorkMode({workMode: 'none'});
             },
             switchDetails (index) {
