@@ -46,7 +46,7 @@ module.exports = {
             cardIcon: 'person',   // choose from material icons set
             mainLabelField: 'name',             // mainLabelField and extraMainLabelFields fills card header, mainLabelField is required
             subLabelField: 'birthplace',         // subLabelField fills card subheader, default - undefined
-            searchFields: ['name', 'birthplace'],  // search row will use this fields for
+            searchFields: ['name'],  // search row will use this fields for
             pages: [
                 {
                     title: 'Personal',
@@ -88,8 +88,8 @@ module.exports = {
                 },
             ],
             color: 'brown',
-            searchFields: ['title', 'studio'],
-            icon: 'factory',
+            searchFields: ['title'],
+            nodeIcon: 'factory',
             mainLabelField: 'title',
             pages: [
                 {
