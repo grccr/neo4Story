@@ -2,9 +2,6 @@
  * Created by forwardmomentum on 22.02.17.
  */
 
-/**
- * Created by forwardmomentum on 21.02.17.
- */
 
 const editControls = {       // use const to choose some props
     INPUT: 'input',
