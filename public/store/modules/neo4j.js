@@ -1,5 +1,3 @@
-
-
 'use strict';
 
 let Vue = require('vue');
@@ -39,8 +37,8 @@ const defEdge = {};
 
 
 let neo4j = window.neo4j.v1;
-let idToHash =  (hash) => hash.toNumber(); //neo4jId.high + '_' + neo4jId.low;
-let hashToId =  (neo4jId) => neo4j.int(neo4jId);
+let idToHash = (hash) => hash.toNumber(); //neo4jId.high + '_' + neo4jId.low;
+let hashToId = (neo4jId) => neo4j.int(neo4jId);
 
 // let neo4jConfig = require('../../config').neo4j;
 
@@ -58,6 +56,7 @@ module.exports = {
             Vue.set(state, "neo4jPassword", payload.neo4jConfig.neo4jPassword);
         }
     },
+    getters: {},
     actions: {
         neo4jConfigSet (store, payload) {
             store.commit('SET_NEO4J_CONFIG', payload);
@@ -66,24 +65,46 @@ module.exports = {
             /**
              * Use it for autocomplete (or any other full text) search
              * @param payload: {
-             *   searchRequest: String
+             *   searchRequest: String,
+             *   searchSettings: Object
              * }
              * @return Promise
              */
+            console.log(payload);
             let neo4j = window.neo4j.v1;
             let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
                 store.state.neo4jPassword));
+            let searchRequest = payload.searchRequest;
+            var searchItems = searchRequest.split(' ');
+            var queryString = '';
+            var returningSet = ' return ';
+
+            payload.searchSettings.types.forEach((type) => {
+                queryString += ` MATCH (${type.name.toLowerCase()}:${type.name}) Where `;
+                returningSet += `${type.name.toLowerCase()}, `;
+                type.searchFields.forEach((searchField, i) => {
+                    searchItems.forEach((searchItem, j) => {
+                        if (i == 0 && j == 0)
+                            queryString += `${type.name.toLowerCase()}.${searchField} STARTS WITH "${searchItem}" `;
+                        else
+                            queryString += ` OR ${type.name.toLowerCase()}.${searchField} STARTS WITH "${searchItem}" `;
+                    });
+                });
+            });
+
+            returningSet = returningSet.slice(0, returningSet.length-2);
+            returningSet += ' limit 10';
+
+            queryString += returningSet;
+
+            console.log(queryString);
+
             let session = driver.session();
-            let searchRequest = payload.searchRequest,
-                name = searchRequest.split(' ')[0],
-                surname = searchRequest.split(' ')[1];
-            let extraQueryStr = surname ? (`OR a.name STARTS WITH "${surname}" OR a.surname STARTS WITH "${surname}"`) : '';
+
+
             return session
                 .run(
-                    "MATCH (a) WHERE a.name STARTS WITH {name} OR a.surname STARTS WITH {name} " +
-                    "OR a.name STARTS WITH {searchRequest}" +
-                    extraQueryStr +
-                    "RETURN a", {name, surname, searchRequest}
+                    queryString
                 )
                 .then(result => {
                     return store.dispatch('neo4jResponseParse', {neo4jData: result});
@@ -95,7 +116,7 @@ module.exports = {
         },
         neo4jFindAllMatches(store, payload) {
             /**
-             * Use it for find any mantched nodes in neo4j with search request from payload
+             * Use it for find any matched nodes in neo4j with search request from payload
              * @param payload: {
              *     searchRequest: String,
              *     withEdges: boolean (default: true) - NOT IMPLEMENTED!
@@ -112,12 +133,12 @@ module.exports = {
                     let matches = result.nodes.map((node) => {
                         return hashToId(node.id);
                     });
-                    if(matches.length > 0)
+                    if (matches.length > 0)
                         return session.run('MATCH p=(a)-[r]-(b) WHERE ID(a) IN {matches} ' +
                             'UNWIND nodes(p) as allnodes WITH COLLECT(ID(allnodes)) AS ALLID ' +
                             'MATCH (n)-[r2]-(m) where ID(n) IN ALLID AND ID(m) IN ALLID ' +
                             'return n, m, r2', {matches});
-                    else return { records: [] };
+                    else return {records: []};
                 })
                 .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
                 .catch(error => {
@@ -129,7 +150,8 @@ module.exports = {
             /**
              * Simple search by id
              * @param payload: {
-             *     id: String/int id
+             *     id: String/int id,
+             *     type: nodeType - for index search NOT IMPLEMENTED - need to check importance
              * }
              */
             let neo4j = window.neo4j.v1;
@@ -137,11 +159,13 @@ module.exports = {
                 store.state.neo4jPassword));
             let session = driver.session();
             let id = hashToId(payload.id);
+
+            let query = `MATCH (a) WHERE ID(a) = {id} ` + // ToDo Configurable Query
+                "OPTIONAL MATCH (a)-[b]-(c) " +
+                "RETURN a,b,c";
             return session
                 .run(
-                    "MATCH (a) WHERE ID(a) = {id} " +
-                    "OPTIONAL MATCH (a)-[b]-(c) " +
-                    "RETURN a,b,c", {id}
+                    query, {id}
                 )
                 .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
                 .catch(error => {
@@ -164,6 +188,8 @@ module.exports = {
                 edgesMap: {}
             };
             let neo4jData = payload.neo4jData;
+            let nodeConfig = payload.nodeConfig;
+            let edgeConfig = payload.edgeConfig;
             let colorPerson = colorBrewPerson[Math.round(Math.random() * colorBrewPerson.length)];
             let colorCompany = colorBrewCompany[Math.round(Math.random() * colorBrewCompany.length)];
             neo4jData.records.forEach(res => {
@@ -178,11 +204,11 @@ module.exports = {
                                 nodeData.x = Math.random() * 0.5;
                                 nodeData.y = Math.random() * 0.5;
                                 nodeData.image = 'img/pig.png'; // default for fast detecting
-                                if(nodeData.semantic_type == "Person") {
+                                if (nodeData.semantic_type == "Person") {
                                     nodeData.image = 'img/person.png';
                                     nodeData.color = colorPerson;
                                 }
-                                if(nodeData.semantic_type == "Company") {
+                                if (nodeData.semantic_type == "Company") {
                                     nodeData.image = 'img/factory.png';
                                     nodeData.color = colorCompany;
                                 }
@@ -259,7 +285,6 @@ module.exports = {
                     session.close();
                     throw error;
                 });
-
         },
         neo4jCreateCompany (store, data) {
             let neo4j = window.neo4j.v1;
@@ -287,6 +312,5 @@ module.exports = {
                 });
         }
 
-    },
-    getters: {}
+    }
 };
