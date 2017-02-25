@@ -52,8 +52,6 @@
                     this.open = true;
                     this.neo4jFullTextSearch({searchRequest: newVal, searchSettings: this.searchSettings})
                             .then((graphResponse) => {
-                                console.log("Response");
-                                console.log(graphResponse);
                                 this.matches = graphResponse.nodes;
                             });
                 }

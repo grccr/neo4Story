@@ -50,7 +50,6 @@ module.exports = {
     },
     mutations: {
         SET_NEO4J_CONFIG (state, payload) {
-            console.log(payload);
             Vue.set(state, "neo4jUrl", payload.neo4jConfig.neo4jUrl);
             Vue.set(state, "neo4jLogin", payload.neo4jConfig.neo4jLogin);
             Vue.set(state, "neo4jPassword", payload.neo4jConfig.neo4jPassword);
@@ -99,12 +98,7 @@ module.exports = {
             returningSet += ' limit 10';
 
             queryString += returningSet;
-
-            console.log(queryString);
-
             let session = driver.session();
-
-
             return session
                 .run(
                     queryString
@@ -230,9 +224,8 @@ module.exports = {
 
                                 nodeData.x = Math.random() * 0.5;
                                 nodeData.y = Math.random() * 0.5;
-                                nodeData.image = 'img/pig.png'; // default for fast detecting
 
-                                nodeData.image = 'img/' + typeConfig.nodeIcon + '.png';
+                                nodeData.image = typeConfig.nodeIcon ? 'img/' + typeConfig.nodeIcon + '.png' : 'img/pig.png';
 
                                 nodeData.color = colors[typeConfig.name];
 
@@ -244,12 +237,19 @@ module.exports = {
                             }
                         }
                         else {
+
+
+                            let match = edgeTypes.filter((type) => {
+
+                                return type.name == field.type;
+                            });
+                            let typeConfig = match[0];
                             let edgeData = {
                                 source: idToHash(field.start),
                                 target: idToHash(field.end),
                                 color: '#acacaf',
                                 type: "def",
-                                label: type_trans[field.type],
+                                label: typeConfig ? typeConfig.value : '',
                                 semantic_type: field.type,
                                 id: idToHash(field.start) + '_' + idToHash(field.end),
                                 // id: field.properties.id,
@@ -269,9 +269,6 @@ module.exports = {
             let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
                 store.state.neo4jPassword));
             let session = driver.session();
-
-            // console.log(data);
-
             let id = data.source + '_' + data.target;
             let source = hashToId(data.source);
             let target = hashToId(data.target);
@@ -282,7 +279,6 @@ module.exports = {
                 WHERE ID(a) = {source} AND ID(b) = {target}
                 CREATE (a)-[r:${label} {id: {id}, comment: {comment}}]->(b) RETURN r`;
 
-            // console.log(queryStr);
 
             return session.run(queryStr, {source, target, id, comment})
                 .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
