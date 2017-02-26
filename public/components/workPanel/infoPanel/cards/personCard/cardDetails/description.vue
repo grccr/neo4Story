@@ -1,7 +1,7 @@
 <template>
     <div class="description-details-container">
         <md-card-content>
-            <p>{{information.text}}</p>
+            <p>{{information.description}}</p>
         </md-card-content>
     </div>
 </template>
