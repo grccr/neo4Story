@@ -39,7 +39,7 @@
         /*width: 20%;*/
         max-height: 70%;
         min-width: 350px;
-        max-width: 40%;
+        max-width: 25%;
         top: 100px;
         position: fixed;
         padding-left: 15px;
