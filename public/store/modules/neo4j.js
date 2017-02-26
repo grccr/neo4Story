@@ -97,22 +97,13 @@ module.exports = {
 
             queryString += returningSet;
 
-            console.log("DFDSF");
-            console.log(queryString);
 
             let session = driver.session();
-            // ,
-            //     name = searchRequest.split(' ')[0],
-            //     surname = searchRequest.split(' ')[1];
-            let extraQueryStr = surname ? (`OR a.name STARTS WITH "${surname}" OR a.surname STARTS WITH "${surname}"`) : '';
 
-            console.log(store.state);
 
 
             return session
-                .run(
-
-                )
+                .run(queryString)
                 .then(result => {
                     return store.dispatch('neo4jResponseParse', {neo4jData: result});
                 })
