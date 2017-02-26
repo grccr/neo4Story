@@ -18,12 +18,11 @@
         <div class="type-select-container">
             <label for="node-type-select" class="semantic-type-select-label">Node type:</label>
             <md-select name="node-type-select" id="node-type-select" v-model="nodeType">
-                <md-option v-bind:class="{'oriented-type': type.oriented}" v-for="type in availableTypes" :value="type" >{{type.name}}</md-option>
+                <md-option v-for="type in availableTypes" :value="type" >{{type.name}}</md-option>
             </md-select>
         </div>
-        <create-person v-if="radioType == 'Person'"></create-person>
-        <!--<create-company></create-company>-->
-        <create-company v-if="radioType == 'Company'"></create-company>
+            <input-card node-type="nodeType" ref="inputCard"></input-card>
+            <md-button class="md-raised md-primary confirm-button" v-on:click="confirmButtonClick">Create!</md-button>
         </md-card>
     </div>
 </template>
@@ -61,8 +60,8 @@
             closeButtonClick () {
 //                this.selectNodes([]);
                 this.setWorkMode({workMode: 'none'});
-            }
-//            confirmButtonClick(){
+            },
+            confirmButtonClick(){}
 ////                this.neo4jCreateCompany({
 ////                    name: this.name,
 ////                    inn: this.inn,
