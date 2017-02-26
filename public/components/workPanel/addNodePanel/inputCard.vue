@@ -1,6 +1,6 @@
 <template>
-    <div>
-
+    <div class="input-card-container">
+        <dataInput v-for="field in nodeType.fields" field="field" :ref="field.name"></dataInput>
     </div>
 </template>
 <script>
@@ -10,11 +10,14 @@
         data() {
             return {}
         },
-        components: {},
+        components: {
+            dataInput: require('./dataInput.vue')
+        },
 
         computed: {},
 
-        methods: {}
+        methods: {},
+        props: ['nodeType']
     }
 </script>
 
