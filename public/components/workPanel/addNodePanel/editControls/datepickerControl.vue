@@ -1,5 +1,5 @@
 <template>
-    <div class="business-details-container">
+    <div>
 
     </div>
 </template>
@@ -9,11 +9,19 @@
         data () {
             return {}
         },
+        components: {},
         computed: {},
         mounted () {
-
         },
-        props: ['information', 'editable'],
-        methods: {}
+        methods: {},
+        props: {
+            field: {
+                type: Object
+            }
+        }
     }
 </script>
+
+<style>
+
+</style>

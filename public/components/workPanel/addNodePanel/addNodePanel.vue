@@ -1,26 +1,25 @@
 <template>
     <div class="create-node-panel">
         <md-card>
-        <md-toolbar class="md-dense">
+            <md-toolbar class="md-dense">
 
-            <md-icon class="link-icon">note_add</md-icon>
-            <h3 class="md-title" style="flex: 1">Create node</h3>
+                <md-icon class="link-icon">note_add</md-icon>
+                <h3 class="md-title" style="flex: 1">Create node</h3>
 
-            <md-button class="md-icon-button" v-on:click="closeButtonClick">
-                <md-icon>close</md-icon>
-                <md-tooltip md-direction="top">Close</md-tooltip>
-            </md-button>
-        </md-toolbar>
-        <div class="type-select-container">
-            <label for="node-type-select" class="semantic-type-select-label">Node type:</label>
-            <md-select name="node-type-select" id="node-type-select" v-model="selectedNodeType">
-                <md-option v-for="type in availableTypes" :value="type" >{{type.name}}</md-option>
-            </md-select>
-        </div>
-            <!--<input-card node-type="nodeType" :ref="inputCard" class="input-card"></input-card>-->
-        <div class="data-inputs-container">
-            <data-input v-for="field in selectedNodeType.fields" :field="field" :ref="field.name"></data-input>
-        </div>
+                <md-button class="md-icon-button" v-on:click="closeButtonClick">
+                    <md-icon>close</md-icon>
+                    <md-tooltip md-direction="top">Close</md-tooltip>
+                </md-button>
+            </md-toolbar>
+            <div class="type-select-container">
+                <label for="node-type-select" class="semantic-type-select-label">Node type:</label>
+                <md-select name="node-type-select" id="node-type-select" v-model="selectedTypeName">
+                    <md-option v-for="type in availableTypes" :value="type.name">{{type.value}}</md-option>
+                </md-select>
+            </div>
+
+            <input-card :type-config="selectedType" :ref="inputCard" class="input-card"
+                        v-if="selectedType.name"></input-card>
             <md-button class="md-raised md-primary confirm-button" v-on:click="confirmButtonClick">Create!</md-button>
         </md-card>
 
@@ -32,14 +31,12 @@
     export default{
         data() {
             return {
-                selectedNodeType: ""
+                selectedTypeName: "",
+                selectedType: {}
             };
         },
         components: {
-//            createPerson: require('./nodeTypes/createPerson.vue'),
-//            createCompany: require('./nodeTypes/createCompany.vue'),
-            inputCard: require('./inputCard.vue'),
-            dataInput: require('./dataInput.vue')
+            inputCard: require('./inputCard.vue')
         },
 
         computed: {
@@ -47,9 +44,11 @@
                 return this.$store.state.appConfig.config.nodeTypes;
             }
         },
-        watch:{
-            selectedNodeType(){
-
+        watch: {
+            selectedTypeName(newVal, oldVal){
+                this.selectedType = this.availableTypes.filter((type) => {
+                            return type.name == this.selectedTypeName;
+                })[0]||{};
             }
         },
         methods: {
@@ -65,7 +64,7 @@
             confirmButtonClick(){
                 console.log(this.$refs.inputCard.$refs);
                 let fields = {};
-                for (let key in this.$refs) {
+                for (let key in this.$refs.inputCard.$refs) {
                     if (this.$refs.inputCard.$refs.hasOwnProperty(key)) {
                         fields[key] = this.$refs.inputCard.$refs[key][0].data;
                     }
@@ -89,6 +88,7 @@
     .radio-container {
         text-align: center;
     }
+
     .data-inputs-container {
         padding-left: 4%;
         padding-right: 8%;
@@ -97,7 +97,6 @@
         max-height: 60%;
         /*padding-bottom: 10%;*/
     }
-
 
     #create-person-inputs .confirm-button {
         margin-bottom: 3%;
