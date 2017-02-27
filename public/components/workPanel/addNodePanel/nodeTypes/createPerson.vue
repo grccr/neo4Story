@@ -52,7 +52,8 @@
                 workplace: '',
                 description: '',
                 birthdate: '',
-                facebook: ''
+                facebook: '',
+                avatar:''
             }
         },
         components: {},
@@ -74,7 +75,8 @@
                     workplace: this.workplace,
                     description: this.description,
                     birthdate: this.birthdate,
-                    facebook: this.facebook
+                    facebook: this.facebook,
+                    avatar: this.avatar
             })
             },
             confirmButtonClick(){
@@ -87,7 +89,8 @@
                             workplace: this.workplace,
                             description: this.description,
                             birthdate: this.birthdate,
-                            facebook: this.facebook
+                            facebook: this.facebook,
+                            avatar: this.avatar
                 },
                     nodeType: 'Person'
                 });
