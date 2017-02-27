@@ -42,6 +42,7 @@
         max-width: 25%;
         top: 100px;
         position: fixed;
+        overflow: auto;
         padding-left: 15px;
     }
 </style>

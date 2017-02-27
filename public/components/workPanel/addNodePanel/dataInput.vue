@@ -34,7 +34,7 @@
     /*}*/
 
     /*.data-input::-webkit-input-placeholder {*/
-        /*font-size: 18px !important;*/
+        /*!*font-size: 18px !important;*!*/
         /*font-family: Roboto;*/
     /*}*/
 
