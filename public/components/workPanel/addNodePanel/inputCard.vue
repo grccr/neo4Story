@@ -30,6 +30,28 @@
         },
 
         methods: {
+            validateField (){
+
+            },
+            getData (){
+                let fields = {};
+                let broken = false;
+                for (let key in this.$refs) {
+                    if (this.$refs.hasOwnProperty(key)) {
+                        let field = this.$refs[key][0].validate();
+                        if (field) {
+                            fields[key] = field;
+                        }
+                        else{
+                            broken = true;
+                            return false;
+                        }
+                    }
+                }
+                if (!broken) {
+                    return {nodeData: fields}
+                }
+            }
         },
         props: {
             typeConfig: {
@@ -40,6 +62,9 @@
 </script>
 
 <style>
+    .fields-card-container{
+        overflow: auto;
+    }
     /*.input-card-container{*/
         /*height: 100%;*/
         /*width: 100%;*/

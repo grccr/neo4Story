@@ -18,7 +18,7 @@
                 </md-select>
             </div>
 
-            <input-card :type-config="selectedType" :ref="inputCard" class="input-card"
+            <input-card :type-config="selectedType" ref="inputCard" class="input-card"
                         v-if="selectedType.name"></input-card>
             <md-button class="md-raised md-primary confirm-button" v-on:click="confirmButtonClick">Create!</md-button>
         </md-card>
@@ -62,22 +62,11 @@
                 this.setWorkMode({workMode: 'none'});
             },
             confirmButtonClick(){
-                console.log(this.$refs.inputCard.$refs);
-                let fields = {};
-                for (let key in this.$refs.inputCard.$refs) {
-                    if (this.$refs.inputCard.$refs.hasOwnProperty(key)) {
-                        fields[key] = this.$refs.inputCard.$refs[key][0].data;
-                    }
+                let newNode = this.$refs.inputCard.getData();
+                if (newNode) {
+                    newNode.nodeType = this.selectedTypeName;
+                    this.addNewNode(newNode);
                 }
-                let nodeType = this.selectedNodeType.name;
-                let nodeData = fields;
-                console.log(nodeType);
-                console.log(nodeData);
-//                this.addNewNode({
-//                    nodeType: nodeType,
-//                    nodeData: nodeData
-//                });
-                this.setWorkMode({workMode: 'none'});
             }
         }
     }
@@ -89,12 +78,12 @@
         text-align: center;
     }
 
-    .data-inputs-container {
+    .input-card {
         padding-left: 4%;
         padding-right: 8%;
         padding-top: 6%;
-        overflow: auto;
-        max-height: 60%;
+        /*overflow: auto;*/
+        /*max-height: 60%;*/
         /*padding-bottom: 10%;*/
     }
 
