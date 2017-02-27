@@ -130,14 +130,14 @@ module.exports = {
 
         },
         addNewNode(store, payload) {
-            if (payload.nodeType == 'Person') {
-                store.dispatch('neo4jCreatePerson', payload.nodeData)
-                    .then(graph =>  store.commit("UPDATE_GRAPH", graph));
-            }
-            else if (payload.nodeType == 'Company') {
-                store.dispatch('neo4jCreateCompany', payload.nodeData)
-                    .then(graph =>  store.commit("UPDATE_GRAPH", graph));
-            }
+            // if (payload.nodeType == 'Person') {
+            store.dispatch('neo4jCreateNode', payload)
+                .then(graph =>  store.commit("UPDATE_GRAPH", graph));
+            // }
+            // else if (payload.nodeType == 'Company') {
+            //     store.dispatch('neo4jCreateCompany', payload.nodeData)
+            //         .then(graph =>  store.commit("UPDATE_GRAPH", graph));
+            // }
         },
         addElementToSelection (store, element) {
             store.commit("ADD_ELEMENT_TO_SELECTION", element);

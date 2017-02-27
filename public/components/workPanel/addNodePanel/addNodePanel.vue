@@ -1,29 +1,28 @@
 <template>
     <div class="create-node-panel">
         <md-card>
-        <md-toolbar class="md-dense">
+            <md-toolbar class="md-dense">
 
-            <md-icon class="link-icon">note_add</md-icon>
-            <h3 class="md-title" style="flex: 1">Create node</h3>
+                <md-icon class="link-icon">note_add</md-icon>
+                <h3 class="md-title" style="flex: 1">Create node</h3>
 
-            <md-button class="md-icon-button" v-on:click="closeButtonClick">
-                <md-icon>close</md-icon>
-                <md-tooltip md-direction="top">Close</md-tooltip>
-            </md-button>
-        </md-toolbar>
-        <!--<div class="radio-container">-->
-            <!--<md-radio v-model="radioType" id="my-test1" name="my-test-group1" md-value="Person" @change="radioButtonChange">Person</md-radio>-->
-            <!--<md-radio v-model="radioType" id="my-test2" name="my-test-group1" md-value="Company" @change="radioButtonChange">Company</md-radio>-->
-        <!--</div>-->
-        <div class="type-select-container">
-            <label for="node-type-select" class="semantic-type-select-label">Node type:</label>
-            <md-select name="node-type-select" id="node-type-select" v-model="nodeType">
-                <md-option v-for="type in availableTypes" :value="type" >{{type.name}}</md-option>
-            </md-select>
-        </div>
-            <input-card node-type="nodeType" ref="inputCard"></input-card>
+                <md-button class="md-icon-button" v-on:click="closeButtonClick">
+                    <md-icon>close</md-icon>
+                    <md-tooltip md-direction="top">Close</md-tooltip>
+                </md-button>
+            </md-toolbar>
+            <div class="type-select-container">
+                <label for="node-type-select" class="semantic-type-select-label">Node type:</label>
+                <md-select name="node-type-select" id="node-type-select" v-model="selectedTypeName">
+                    <md-option v-for="type in availableTypes" :value="type.name">{{type.value}}</md-option>
+                </md-select>
+            </div>
+
+            <input-card :type-config="selectedType" :ref="inputCard" class="input-card"
+                        v-if="selectedType.name"></input-card>
             <md-button class="md-raised md-primary confirm-button" v-on:click="confirmButtonClick">Create!</md-button>
         </md-card>
+
     </div>
 </template>
 <script>
@@ -32,13 +31,12 @@
     export default{
         data() {
             return {
-                nodeType: ""
+                selectedTypeName: "",
+                selectedType: {}
             };
         },
         components: {
-//            createPerson: require('./nodeTypes/createPerson.vue'),
-//            createCompany: require('./nodeTypes/createCompany.vue'),
-            inputCard: require('./inputCard.vue'),
+            inputCard: require('./inputCard.vue')
         },
 
         computed: {
@@ -46,36 +44,41 @@
                 return this.$store.state.appConfig.config.nodeTypes;
             }
         },
-
+        watch: {
+            selectedTypeName(newVal, oldVal){
+                this.selectedType = this.availableTypes.filter((type) => {
+                            return type.name == this.selectedTypeName;
+                })[0]||{};
+            }
+        },
         methods: {
             ...mapActions({
                 showAddPanel: "showAddPanel",
                 setWorkMode: "setWorkMode",
-                switchNodeType: "switchNodeType",
+//                switchNodeType: "switchNodeType",
                 addNewNode: "addNewNode"
             }),
-            radioButtonChange() {
-                this.switchNodeType(this.radioType);
-            },
             closeButtonClick () {
-//                this.selectNodes([]);
                 this.setWorkMode({workMode: 'none'});
             },
-            confirmButtonClick(){}
-////                this.neo4jCreateCompany({
-////                    name: this.name,
-////                    inn: this.inn,
-////                    city: this.city,
-////                    description: this.description,
-////                    country: this.country,
-////                    url: this.url
-////                });
-////                this.addNewNode(this.$store.state.addNodeButton.inputData);
-//                console.log(this.$store.state.addNodeButton.inputData);
-////                this.showAddPanel(false);
-////                this.showAddPanel(false);
-//                this.setWorkMode({workMode: 'none'});
-//            }
+            confirmButtonClick(){
+                console.log(this.$refs.inputCard.$refs);
+                let fields = {};
+                for (let key in this.$refs.inputCard.$refs) {
+                    if (this.$refs.inputCard.$refs.hasOwnProperty(key)) {
+                        fields[key] = this.$refs.inputCard.$refs[key][0].data;
+                    }
+                }
+                let nodeType = this.selectedNodeType.name;
+                let nodeData = fields;
+                console.log(nodeType);
+                console.log(nodeData);
+//                this.addNewNode({
+//                    nodeType: nodeType,
+//                    nodeData: nodeData
+//                });
+                this.setWorkMode({workMode: 'none'});
+            }
         }
     }
 </script>
@@ -84,6 +87,19 @@
 
     .radio-container {
         text-align: center;
+    }
+
+    .data-inputs-container {
+        padding-left: 4%;
+        padding-right: 8%;
+        padding-top: 6%;
+        overflow: auto;
+        max-height: 60%;
+        /*padding-bottom: 10%;*/
+    }
+
+    #create-person-inputs .confirm-button {
+        margin-bottom: 3%;
     }
 
     /*.create-node-panel{*/
