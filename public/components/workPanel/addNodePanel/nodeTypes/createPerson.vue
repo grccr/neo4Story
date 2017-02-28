@@ -10,9 +10,17 @@
                     <!--<label>Input something</label>-->
                     <md-input v-model="surname"  placeholder="Surname"></md-input>
                 </md-input-container>
+                <md-input-container class="search-row-container middleName add-input">
+                    <!--<label>Input something</label>-->
+                    <md-input v-model="middleName"  placeholder="Middle name"></md-input>
+                </md-input-container>
                 <md-input-container class="search-row-container workplace add-input">
                     <!--<label>Input something</label>-->
                     <md-input v-model="workplace"  placeholder="Work"></md-input>
+                </md-input-container>
+                <md-input-container class="search-row-container avatar add-input">
+                    <!--<label>Input something</label>-->
+                    <md-input v-model="avatar"  placeholder="Avatar"></md-input>
                 </md-input-container>
                 <md-input-container class="search-row-container birthdate add-input">
                     <!--<label>Input something</label>-->
@@ -40,10 +48,12 @@
             return {
                 name: '',
                 surname: '',
+                middleName: '',
                 workplace: '',
                 description: '',
                 birthdate: '',
-                facebook: ''
+                facebook: '',
+                avatar:''
             }
         },
         components: {},
@@ -58,14 +68,15 @@
 
             }),
             inputChanged() {
-                console.log('Aaaa');
                 this.inputDataToState({
                     name: this.name,
                     surname: this.surname,
+                    middleName: this.middleName,
                     workplace: this.workplace,
                     description: this.description,
                     birthdate: this.birthdate,
-                    facebook: this.facebook
+                    facebook: this.facebook,
+                    avatar: this.avatar
             })
             },
             confirmButtonClick(){
@@ -74,10 +85,12 @@
                         nodeData:{
                             name: this.name,
                             surname: this.surname,
+                            middleName: this.middleName,
                             workplace: this.workplace,
                             description: this.description,
                             birthdate: this.birthdate,
-                            facebook: this.facebook
+                            facebook: this.facebook,
+                            avatar: this.avatar
                 },
                     nodeType: 'Person'
                 });
