@@ -1,18 +1,18 @@
 ### How to set up neo4Story for unique data?
 
-Of course, every data set has it's own scheme and
- you need to set this scheme in JSON form. 
- 
-We plan to do some auto-setters of basic configuration and desktop GUI for fast setting,
- but not there is one easy way to start:
+Every data set has it's own scheme and
+ you have to set up this scheme in JSON form. 
+
+We are working at building fancy auto-setters of basic configuration and desktop GUI, 
+but for nowthere is one easy way to start: 
 
 ```
 cp public/config.template.js public/config.js
 ```
 
-And edit public/config.js to your data scheme.
+Then, edit public/config.js to your data scheme.
 
-Take a look to your config.js:
+Here is the sample:
 
 ```
 // The first part of config is constant, you don't have to change it 
