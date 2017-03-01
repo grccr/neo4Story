@@ -10,7 +10,8 @@ module.exports = {
         // workMode - info (starts infoPanel), addNode (starts nodeAddPanel), edgeNode (starts edgeAddPanel),
         workMode: 'none',
         // selectorNodeActive - flag that can be used to understand switch workMode on nodeClick or not
-        selectorNodeActive: false
+        selectorNodeActive: false,
+        selectorEdgeActive: false
     },
     mutations: {
         SWITCH_NODE_TYPE(state, nodeType) {
@@ -22,6 +23,9 @@ module.exports = {
         },
         SET_SELECTOR_NODE_ACTIVE (state, selectorNodeActive) {
             Vue.set(state, 'selectorNodeActive', selectorNodeActive);
+        },
+        SET_SELECTOR_EDGE_ACTIVE (state, selectorEdgeActive) {
+            Vue.set(state, 'selectorEdgeActive', selectorEdgeActive);
         }
     },
     actions: {
@@ -33,6 +37,9 @@ module.exports = {
         },
         setSelectorNodeActive (store, selectorNodeActive) {
             store.commit('SET_SELECTOR_NODE_ACTIVE', selectorNodeActive);
+        },
+        setSelectorEdgeActive (store, selectorEdgeActive) {
+            store.commit('SET_SELECTOR_EDGE_ACTIVE', selectorEdgeActive);
         }
     },
     getters: {}

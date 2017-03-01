@@ -85,7 +85,6 @@
                     this.addNodeToSelection(JSON.parse(JSON.stringify(event.data.node)));
             },
             onEdgeClick(event) {
-                console.log(event.data);
                 if (!this.$store.state.edit.selectorEdgeActive) {
                     this.resetSelection();
                     this.addEdgeToSelection(JSON.parse(JSON.stringify(event.data.edge)));

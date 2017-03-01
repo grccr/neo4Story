@@ -35,8 +35,6 @@ module.exports = {
                 }
                 tempNodes.push(node);
             });
-            console.log(tempNodes);
-            console.log(selectedElements);
             Vue.set(state, 'selectedNodes', selectedElements);
             Vue.set(state, 'nodes', tempNodes);
         },
