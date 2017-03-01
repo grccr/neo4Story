@@ -3,7 +3,7 @@
 
         <info-panel v-if="mode=='nodeInfo' || mode=='edgeInfo'"></info-panel>
         <add-node-panel v-if="mode=='addNode'"></add-node-panel>
-        <add-edge-panel v-if="mode=='addEdge'" :selectedElements="selectedElements"></add-edge-panel>
+        <add-edge-panel v-if="mode=='addEdge'" :selectedElements="selectedNodes"></add-edge-panel>
 
     </div>
 </template>

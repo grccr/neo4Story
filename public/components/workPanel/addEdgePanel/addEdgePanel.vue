@@ -62,7 +62,7 @@
             return {
                 semanticType: 'friends',
                 comment: '',
-                selectedNodes: JSON.parse(JSON.stringify(this.selectedNodes)),
+                selectedNodes: JSON.parse(JSON.stringify(this.selectedElements)),
                 ppTypes: [{value: 'friends', name: 'Друзья', oriented: false}, {value: 'collegue', name: 'Collegue', oriented: false}],
                 pcTypes: [{value: 'host', name: 'Учредитель', oriented: false}, {value: 'client', name: 'Client', oriented: false}],
                 ccTypes: [{value: 'child', name: 'Дочка', oriented: true}]       // oriented type! todo coloring of oriented types
