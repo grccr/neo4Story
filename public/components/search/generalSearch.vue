@@ -25,7 +25,11 @@
                     this.addSubGraphById({id: item.selected.id});
                 }
                 else {
-                    this.addSubGraphBySearchRequest({searchRequest: item.searchRequest});
+                    this.addSubGraphBySearchRequest(
+                        {
+                            searchRequest: item.searchRequest,
+                            searchSettings: this.$store.state.appConfig.config.nodeTypes
+                        });
                 }
             }
         }

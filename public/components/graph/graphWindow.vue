@@ -67,7 +67,8 @@
         methods: {
             ...mapActions({
                 resetSelection: "resetSelection",
-                addElementToSelection: "addElementToSelection",
+                addNodeToSelection: "addNodeToSelection",
+                addEdgeToSelection: "addEdgeToSelection",
                 neo4jSearch: "neo4jSearch",
                 updateGraph: "updateGraph",
                 graphLayout: "graphLayout",
@@ -77,14 +78,23 @@
             onNodeClick(event) {
                 if (!this.$store.state.edit.selectorNodeActive) {
                     this.resetSelection();
-                    this.addElementToSelection(JSON.parse(JSON.stringify(event.data.node)));
-                    this.setWorkMode({workMode: 'info'});
+                    this.addNodeToSelection(JSON.parse(JSON.stringify(event.data.node)));
+                    this.setWorkMode({workMode: 'nodeInfo'});
                 }
                 else
-                    this.addElementToSelection(JSON.parse(JSON.stringify(event.data.node)));
+                    this.addNodeToSelection(JSON.parse(JSON.stringify(event.data.node)));
+            },
+            onEdgeClick(event) {
+                if (!this.$store.state.edit.selectorEdgeActive) {
+                    this.resetSelection();
+                    this.addEdgeToSelection(JSON.parse(JSON.stringify(event.data.edge)));
+                    this.setWorkMode({workMode: 'edgeInfo'});
+                }
+                else
+                    this.addEdgeToSelection(JSON.parse(JSON.stringify(event.data.edge)));
             },
             onNodeDoubleClick(event) {
-                let selectedNodes = this.$store.state.graph.selectedElements;
+                let selectedNodes = this.$store.state.graph.selectedNodes;
                 this.addSubGraphById({id: selectedNodes[0].id});
             },
             onClickStage(event) {
@@ -140,6 +150,7 @@
                                 camera: 'cam1'
                             });
                             self.sigmaInstance.bind('clickNode', self.onNodeClick);
+                            self.sigmaInstance.bind('clickEdges', self.onEdgeClick);
                             self.sigmaInstance.bind('doubleClickNode', self.onNodeDoubleClick);
                             self.sigmaInstance.bind('clickStage', self.onClickStage);
                         }

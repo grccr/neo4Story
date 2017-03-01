@@ -1,6 +1,7 @@
 <template>
     <div class="info-panel">
-        <node-card :information="information"></node-card>
+        <node-card :information="nodeInformation" v-if="mode=='nodeInfo'"></node-card>
+        <edge-card :information="edgeInformation" v-if="mode=='edgeInfo'"></edge-card>
     </div>
 </template>
 
@@ -12,14 +13,21 @@
         },
         components: {
             nodeCard: require('./cards/nodeCard/nodeCard.vue'),
-//            personCard: require('./cards/personCard/personCard.vue'),
-//            companyCard: require('./cards/companyCard/companyCard.vue')
+            edgeCard: require('./cards/edgeCard/edgeCard.vue')
         },
         computed: {
-            information () {
-                let selectedNodes = this.$store.state.graph.selectedElements;
+            nodeInformation () {
+                let selectedNodes = this.$store.state.graph.selectedNodes;
 //                let selectedNodes = this.$store.state.graph.nodes.filter((node) => selectedIds.includes(node.id));
                 return selectedNodes[0];
+            },
+            mode () {
+                return this.$store.state.edit.workMode;
+            },
+            edgeInformation () {
+                let selectedEdges = this.$store.state.graph.selectedEdges;
+//                let selectedNodes = this.$store.state.graph.nodes.filter((node) => selectedIds.includes(node.id));
+                return selectedEdges[0][0];
             }
         },
         methods: {
@@ -29,7 +37,7 @@
 //                selectNodes: 'selectNodes'
 //            }),
 //            exploreButtonClick () {
-//                let selectedIds = this.$store.state.graph.selectedElements;
+//                let selectedIds = this.$store.state.graph.selectedNodes;
 //                let selectedNodes = this.$store.state.graph.nodes.filter((node) => selectedIds.includes(node.id));
 //                let name = selectedNodes[0].name;
 //                let surname = selectedNodes[0].surname;
