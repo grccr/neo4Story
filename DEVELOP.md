@@ -12,7 +12,11 @@
  
 Now neo4Story is very raw and unstable tool, which has no server in fact. But there is some guiding line, that you can see in milestones (todo link) of project.
 
-#### 4. Links
+#### 4. Tests and CI
+
+todo
+
+#### 5. Links
 
 - [VueJS](https://vuejs.org/) great component js framework 
 - [Vuex](https://vuex.vuejs.org) flux-way oriented state managment tool for vue-based app 
