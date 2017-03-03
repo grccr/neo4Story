@@ -196,6 +196,32 @@
 	        var validationResult = configValidator.validateNodeTypes(nodeTypesSample);
 	        (0, _chai.expect)(validationResult.success).to.be.false;
 	    });
+
+	    it('validateEdgeTypesConfig1', function () {
+	        var edgeTypesSample = [{
+	            value: 'test',
+	            fields: [{
+	                name: 'name',
+	                alias: 'name',
+	                required: true
+	            }]
+	        }];
+	        var validationResult = configValidator.validateNodeTypes(edgeTypesSample);
+	        (0, _chai.expect)(validationResult.success).to.be.false;
+	    });
+	    it('validateEdgeTypesConfig2', function () {
+	        var edgeTypesSample = [{
+	            name: 'Test',
+	            value: 'test',
+	            fields: [{
+	                name: 'name',
+	                alias: 'name',
+	                required: true
+	            }]
+	        }];
+	        var validationResult = configValidator.validateNodeTypes(edgeTypesSample);
+	        (0, _chai.expect)(validationResult.success).to.be.false;
+	    });
 	});
 
 /***/ },
