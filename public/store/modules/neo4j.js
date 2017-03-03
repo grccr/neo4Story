@@ -281,18 +281,18 @@ module.exports = {
             let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
                 store.state.neo4jPassword));
             let session = driver.session();
-            let id = data.source + '_' + data.target;
+            // let id = data.source + '_' + data.target;
             let source = hashToId(data.source);
             let target = hashToId(data.target);
-            let label = data.semanticType;
-            let comment = data.comment;
+            let edgeData = data.data;
+            let label = data.edgeType;
 
             let queryStr = `MATCH (a),(b)
                 WHERE ID(a) = {source} AND ID(b) = {target}
-                CREATE (a)-[r:${label} {id: {id}, comment: {comment}}]->(b) RETURN r`;
+                CREATE (a)-[r:${label} {edgeData}]->(b) RETURN r`;
 
-
-            return session.run(queryStr, {source, target, id, comment})
+            console.log(edgeData);
+            return session.run(queryStr, {source, target, edgeData})
                 .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
                 .catch(error => {
                     session.close();
@@ -307,7 +307,7 @@ module.exports = {
             let session = driver.session();
 
             let nodeType = data.nodeType;
-            let nodeData = data.nodeData;
+            let nodeData = data.data;
             let queryStr = `CREATE (a:${nodeType} {nodeData}) RETURN a`;
             return session
                 .run(

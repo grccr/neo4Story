@@ -49,7 +49,7 @@
                     }
                 }
                 if (!broken) {
-                    return {nodeData: fields}
+                    return {data: fields}
                 }
             }
         },
