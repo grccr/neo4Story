@@ -87,6 +87,7 @@
 
                 let types = this.$store.state.appConfig.config.nodeTypes
                                 .filter((type) => {
+                                    console.log(type);
                                     return type.conSearchFields.length > 0 || type.swSearchFields.length > 0;
                                 })
                                 .map((type) => {
@@ -140,7 +141,6 @@
             down() {
                 if (this.current < this.matches.length - 1) {
                     this.current++;
-                    //todo: find more flux way for scroll move problem
                     var container = document.getElementById('autocomplete-container');
                     var rowToScrollTo = document.getElementsByClassName('md-menu-item')[this.current];
                     container.scrollTop = rowToScrollTo.offsetTop;
