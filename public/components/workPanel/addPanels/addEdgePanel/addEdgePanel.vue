@@ -40,13 +40,15 @@
                 <div v-if="inputsActivated">
                     <div class="type-select-container">
                         <label for="semantic-type-select" class="semantic-type-select-label">Relationship type:</label>
-                        <md-select :disabled="!inputsActivated" name="semantic-type-select" id="semantic-type-select" v-model="semanticType">
-                            <md-option v-bind:class="{'oriented-type': type.oriented}" v-for="type in avaliableTypes" :value="type.value" >{{type.name}}</md-option>
+                        <md-select :disabled="!inputsActivated" name="semantic-type-select" id="semantic-type-select" v-model="selectedTypeName">
+                            <md-option :disabled="type.from == 1" v-bind:class="{'oriented-type': type.oriented}" v-for="type in availableTypes" :value="type.name" >{{type.value}}</md-option>
                         </md-select>
                     </div>
-                    <md-input-container class="search-row-container">
-                        <md-input :disabled="!inputsActivated" v-model="comment" placeholder="Prooflink"></md-input>
-                    </md-input-container>
+                    <!--<md-input-container class="search-row-container">-->
+                        <!--<md-input :disabled="!inputsActivated" v-model="comment" placeholder="Prooflink"></md-input>-->
+                    <!--</md-input-container>-->
+                    <input-card :type-config="selectedType" ref="inputCard" class="input-card"
+                                v-if="selectedType.name"></input-card>
                 </div>
 
             </div>
@@ -60,12 +62,13 @@
     export default {
         data () {
             return {
-                semanticType: 'friends',
+                selectedTypeName: 'friends',
+                selectedType: {},
                 comment: '',
                 selectedNodes: JSON.parse(JSON.stringify(this.selectedElements)),
-                ppTypes: [{value: 'friends', name: 'Друзья', oriented: false}, {value: 'collegue', name: 'Collegue', oriented: false}],
-                pcTypes: [{value: 'host', name: 'Учредитель', oriented: false}, {value: 'client', name: 'Client', oriented: false}],
-                ccTypes: [{value: 'child', name: 'Дочка', oriented: true}]       // oriented type! todo coloring of oriented types
+//                ppTypes: [{value: 'friends', name: 'Друзья', oriented: false}, {value: 'collegue', name: 'Collegue', oriented: false}],
+//                pcTypes: [{value: 'host', name: 'Учредитель', oriented: false}, {value: 'client', name: 'Client', oriented: false}],
+//                ccTypes: [{value: 'child', name: 'Дочка', oriented: true}]       // oriented type! todo coloring of oriented types
             }
         },
         props: {
@@ -89,37 +92,82 @@
 //          });
 //        },
         components: {
-            searchRow: require('../../search/autocompleteSearch/searchRow.vue')
+            searchRow: require('../../../search/autocompleteSearch/searchRow.vue'),
+            inputCard: require('./../inputCard.vue')
         },
         computed: {
             inputsActivated () {
                 return this.selectedNodes.length == 2 && this.selectedNodes[0];
             },
-            avaliableTypes () {
+            availableTypes () {
+                let include = (arr,obj) => {
+                    return (arr.indexOf(obj) != -1);
+                };
+                let toReturn = [];
                 if (this.selectedNodes.length == 2) {
-                    let personCount = 0;
-                    this.selectedNodes.forEach((selectedNode) => {
-                        if(selectedNode.semantic_type == "Person") personCount++;
+                    let firstNode = this.selectedNodes[0];
+                    let secondNode = this.selectedNodes[1];
+                    this.$store.state.appConfig.config.edgeTypes.forEach((edgeType) => {
+                        if (edgeType.allowedLinks.hasOwnProperty(firstNode.semantic_type)) {
+                            if (include(edgeType.allowedLinks[firstNode.semantic_type], secondNode.semantic_type)){
+                                if (edgeType.oriented) {
+                                    toReturn.push({
+                                        from: 0,
+                                        to: 1,
+                                        value: edgeType.value,
+                                        name: edgeType.name,
+                                        oriented: edgeType.oriented,
+                                        fields: edgeType.fields
+                                    });}
+                                else {
+                                    toReturn.push({
+                                        from: '',
+                                        to: '',
+                                        value: edgeType.value,
+                                        name: edgeType.name,
+                                        oriented: edgeType.oriented,
+                                        fields: edgeType.fields
+                                    });
+                                }
+                            }
+
+                        }
+                        if (edgeType.allowedLinks.hasOwnProperty(secondNode.semantic_type)) {
+                            if (include(edgeType.allowedLinks[secondNode.semantic_type], firstNode.semantic_type)){
+                                if (edgeType.oriented) {
+                                    toReturn.push({
+                                        from: 1,
+                                        to: 0,
+                                        value: edgeType.value,
+                                        name: edgeType.name,
+                                        oriented: edgeType.oriented,
+                                        fields: edgeType.fields
+                                    });}
+                                else {
+                                    toReturn.push({
+                                        from: '',
+                                        to: '',
+                                        value: edgeType.value,
+                                        name: edgeType.name,
+                                        oriented: edgeType.oriented,
+                                        fields: edgeType.fields
+                                    });
+                                }
+                            }
+
+                        }
                     });
-                    console.log(personCount);
-                    if(personCount == 2) {
-                        this.semanticType = this.ppTypes[0].value;
-                        return this.ppTypes;
-                    }
-                    if(personCount == 1) {
-                        this.semanticType = this.pcTypes[0].value;
-                        return this.pcTypes;
-                    }
-                    if(personCount == 0) {
-                        this.semanticType = this.ccTypes[0].value;
-                        return this.ccTypes;
-                    }
-                    else return [];
-                }
-                else return [];
             }
-        },
+                return toReturn;
+        }},
         mounted () {
+        },
+        watch: {
+            selectedTypeName(newVal, oldVal){
+                this.selectedType = this.availableTypes.filter((type) => {
+                        return type.name == this.selectedTypeName;
+                    })[0]||{};
+            }
         },
         methods: {
             ...mapActions({
@@ -151,12 +199,14 @@
                 console.log(selected);
             },
             confirmButtonClicked () {
-                this.addNewEdge({
-                    source: this.selectedNodes[0].id,
-                    target: this.selectedNodes[1].id,
-                    comment: this.comment,
-                    semanticType: this.semanticType
-                });
+                let newEdge = this.$refs.inputCard.getData();
+                if (newEdge) {
+                    newEdge.source = this.selectedNodes[0].id;
+                    newEdge.target = this.selectedNodes[1].id;
+                    newEdge.data.id = newEdge.source + '_' + newEdge.target;
+                    newEdge.edgeType = this.selectedTypeName;
+                    this.addNewEdge(newEdge);
+                }
                 this.setWorkMode({workMode: 'none'});
             },
             closeButtonClick () {

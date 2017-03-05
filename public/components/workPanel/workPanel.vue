@@ -15,8 +15,8 @@
         },
         components: {
             infoPanel: require('./infoPanel/infoPanel.vue'),
-            addEdgePanel: require('./addEdgePanel/addEdgePanel.vue'),
-            addNodePanel: require('./addNodePanel/addNodePanel.vue')
+            addEdgePanel: require('./addPanels/addEdgePanel/addEdgePanel.vue'),
+            addNodePanel: require('./addPanels/addNodePanel/addNodePanel.vue')
         },
         computed: {
             mode () {

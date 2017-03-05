@@ -196,6 +196,32 @@
 	        var validationResult = configValidator.validateNodeTypes(nodeTypesSample);
 	        (0, _chai.expect)(validationResult.success).to.be.false;
 	    });
+
+	    it('validateEdgeTypesConfig1', function () {
+	        var edgeTypesSample = [{
+	            value: 'test',
+	            fields: [{
+	                name: 'name',
+	                alias: 'name',
+	                required: true
+	            }]
+	        }];
+	        var validationResult = configValidator.validateNodeTypes(edgeTypesSample);
+	        (0, _chai.expect)(validationResult.success).to.be.false;
+	    });
+	    it('validateEdgeTypesConfig2', function () {
+	        var edgeTypesSample = [{
+	            name: 'Test',
+	            value: 'test',
+	            fields: [{
+	                name: 'name',
+	                alias: 'name',
+	                required: true
+	            }]
+	        }];
+	        var validationResult = configValidator.validateNodeTypes(edgeTypesSample);
+	        (0, _chai.expect)(validationResult.success).to.be.false;
+	    });
 	});
 
 /***/ },
@@ -8620,7 +8646,66 @@
 	        return { success: true };
 	    },
 	    validateEdgeTypes: function validateEdgeTypes(edgeTypes) {
-	        // todo
+
+	        if (!edgeTypes) return { success: false, message: 'node types undefined!' };
+	        if (edgeTypes.length == 0) return { success: false, message: 'empty node types list!' };
+	        for (var typeIndex in edgeTypes) {
+	            var _type = edgeTypes[typeIndex];
+	            if (!_type.name) return { success: false, message: 'type with ' + typeIndex + ' has no name!' };
+	            if (!_type.value) return { success: false, message: 'type with ' + _type.name + ' has no value!' };
+	            if (!_type.fields) return { success: false, message: 'type ' + _type.name + ' has no fields!' };
+	            if (_type.fields.length == 0) return {
+	                success: false,
+	                message: 'type ' + _type.name + ' has empty fields list!'
+	            };
+
+	            if (_type.fields.filter(function (field) {
+	                return !field.name;
+	            }).length > 0) return {
+	                success: false,
+	                message: 'type ' + _type.name + ' has field without name!'
+	            };
+
+	            if (_type.fields.filter(function (field) {
+	                return field.required;
+	            }).length == 0) return {
+	                success: false,
+	                message: 'type ' + _type.name + ' has all fields without required flag! At least one field must be required'
+	            };
+
+	            if (_type.fields.filter(function (field) {
+	                return !field.name;
+	            }).length > 0) return { success: false, message: 'type ' + _type.name + ' has field/s without name!' };
+	            if (_type.fields.filter(function (field) {
+	                return !field.alias;
+	            }).length > 0) return { success: false, message: 'type ' + _type.name + ' has field/s without alias!' };
+	            // if (!type.mainLabelField) return {
+	            //     success: false,
+	            //     message: 'type with ' + type.name + ' has no mainLabelField!'
+	            // };
+
+	            var _fieldNames = _type.fields.map(function (field) {
+	                return field.name;
+	            });
+
+	            // if(!fieldNames.includes(type.mainLabelField))
+	            //     return { success: false, message: 'type ' + type.name + ' has mainLabelField not from fields of this type!'};
+
+	            if (_type.fields.filter(function (field) {
+	                if (!field.editControl) return false;
+	                return !validEditControls.includes(field.editControl);
+	            }).length > 0) return { success: false, message: 'type ' + _type.name + ' has field with not valid editControl!' };
+
+	            // var flag = true;
+	            // if (type.searchFields) {
+	            //     type.searchFields.forEach((searchField) => {
+	            //         if(!fieldNames.includes(searchField))
+	            //             flag = false;
+	            //     });
+	            // }
+	            // if(!flag) return { success: false, message: 'type ' + type.name + ' has searchField/s not from fields of this type!'};
+
+	        }
 	        return { success: true };
 	    }
 	};
@@ -9970,6 +10055,14 @@
 	        return nodeTypes;
 	    },
 	    prepareEdgeTypes: function prepareEdgeTypes(edgeTypes) {
+	        edgeTypes.forEach(function (type) {
+
+	            type.fields.forEach(function (field) {
+	                if (!field.required) field.required = false; // direct false definition to escape undefined
+	                if (!field.editControl) field.editControl = 'input';
+	                if (!field.type) field.type = 'string';
+	            });
+	        });
 	        return edgeTypes;
 	    }
 	};
@@ -10014,7 +10107,6 @@
 	        };
 	        ADD_NODE_TO_SELECTION(state, node);
 	        // assert result
-	        console.log(state);
 	        (0, _chai.expect)(state.nodes[0].selected).to.equal(true);
 	    });
 
@@ -10033,7 +10125,6 @@
 	        };
 	        ADD_EDGE_TO_SELECTION(state, edge);
 	        // assert result
-	        console.log(state);
 	        (0, _chai.expect)(state.edges[0].selected).to.equal(true);
 	    });
 	});
@@ -10083,8 +10174,6 @@
 	        },
 	        UPDATE_NODES: function UPDATE_NODES(state, payload) {},
 	        ADD_NODE_TO_SELECTION: function ADD_NODE_TO_SELECTION(state, element) {
-	            console.log(element);
-	            console.log((0, _stringify2.default)(element));
 	            var selectedElements = JSON.parse((0, _stringify2.default)(state.selectedNodes));
 	            selectedElements.selectedd = true;
 	            selectedElements.push(element);
@@ -10096,16 +10185,10 @@
 	                }
 	                tempNodes.push(node);
 	            });
-	            console.log(selectedElements);
-	            console.log((0, _stringify2.default)(selectedElements));
-	            console.log(tempNodes);
-	            console.log((0, _stringify2.default)(tempNodes));
 	            Vue.set(state, 'selectedNodes', selectedElements);
 	            Vue.set(state, 'nodes', tempNodes);
 	        },
 	        ADD_EDGE_TO_SELECTION: function ADD_EDGE_TO_SELECTION(state, element) {
-	            console.log(element);
-	            console.log((0, _stringify2.default)(element));
 	            var selectedElements = JSON.parse((0, _stringify2.default)(state.selectedEdges));
 	            selectedElements.selectedd = true;
 	            selectedElements.push(element);
@@ -10117,8 +10200,6 @@
 	                }
 	                tempEdges.push(edge);
 	            });
-	            console.log((0, _stringify2.default)(selectedElements));
-	            console.log((0, _stringify2.default)(tempEdges));
 	            Vue.set(state, 'selectedEdges', selectedElements);
 	            Vue.set(state, 'edges', tempEdges);
 	        },

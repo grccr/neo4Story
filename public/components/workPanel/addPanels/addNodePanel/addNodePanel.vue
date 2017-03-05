@@ -36,7 +36,7 @@
             };
         },
         components: {
-            inputCard: require('./inputCard.vue')
+            inputCard: require('./../inputCard.vue')
         },
 
         computed: {

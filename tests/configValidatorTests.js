@@ -145,4 +145,30 @@ describe('configValidation', () => {
         expect(validationResult.success).to.be.false;
     });
 
+    it('validateEdgeTypesConfig1', () => {
+        const edgeTypesSample = [{
+            value: 'test',
+            fields: [{
+                name: 'name',
+                alias: 'name',
+                required: true
+            }]
+        }];
+        let validationResult = configValidator.validateNodeTypes(edgeTypesSample);
+        expect(validationResult.success).to.be.false;
+    });
+    it('validateEdgeTypesConfig2', () => {
+        const edgeTypesSample = [{
+            name: 'Test',
+            value: 'test',
+            fields: [{
+                name: 'name',
+                alias: 'name',
+                required: true
+            }]
+        }];
+        let validationResult = configValidator.validateNodeTypes(edgeTypesSample);
+        expect(validationResult.success).to.be.false;
+    });
+
 });
