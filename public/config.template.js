@@ -4,6 +4,13 @@
 
 'use strict';
 
+const editControls = {       // use const to choose some props
+    INPUT: 'input',
+    SELECT: 'select',
+    DATEPICKER: 'datepicker',
+    RANGE: 'range'
+};
+
 //noinspection BadExpressionStatementJS
 module.exports = {
     neo4jConfig: {
@@ -20,7 +27,7 @@ module.exports = {
                     name: 'name',        // machine name of field - required!
                     alias: 'Name',       // human name of field - required!
                     type: String,        // field type - String, Num, Boolean. Default: String
-                    editControl: 'input',    // edit field UI control - input, select, range, datapicker. Default: 'input'
+                    editControl: editControls.INPUT,    // edit field UI control  Default: 'input'
                     required: false,         // required in create/edit process, Default - false
                     placeholder: 'person name'     // placeholder of editControl
                 },
