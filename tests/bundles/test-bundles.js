@@ -8571,7 +8571,7 @@
 
 	describe('configPreparation', function () {
 
-	    it('prepareNodeTypes1', function () {
+	    it('prepareNodeTypes1 - common case', function () {
 	        var nodeTypesSample = [{
 	            name: 'Test',
 	            value: 'test',
@@ -8607,7 +8607,7 @@
 	    prepareNodeTypes: function prepareNodeTypes(nodeTypes) {
 	        nodeTypes.forEach(function (type) {
 
-	            type.fields.map(function (field) {
+	            type.fields.forEach(function (field) {
 	                if (!field.required) field.required = false; // direct false definition to escape undefined
 	                if (!field.editControl) field.editControl = 'input';
 	                if (!field.type) field.type = String;
