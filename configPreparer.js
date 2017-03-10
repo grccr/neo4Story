@@ -9,7 +9,8 @@ module.exports = {
             type.fields.forEach((field) => {
                 if(!field.required) field.required = false; // direct false definition to escape undefined
                 if(!field.editControl) field.editControl = 'input';
-                if(!field.type) field.type = String;
+                if(!field.type) field.type = 'string';
+                if(!field.extraMainLabelFields) field.extraMainLabelFields = [];
             });
 
         });

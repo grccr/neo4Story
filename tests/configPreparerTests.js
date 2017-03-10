@@ -29,7 +29,7 @@ describe('configPreparation', () => {
         let preparedNodeTypes = configPreparer.prepareNodeTypes(nodeTypesSample);
         expect(configValidator.validateNodeTypes(preparedNodeTypes).success).to.be.true;  // check that valid config is still valid
         expect(preparedNodeTypes[0].fields[0].editControl).to.equal('input');
-        expect(preparedNodeTypes[0].fields[0].type).to.equal(String);
+        expect(preparedNodeTypes[0].fields[0].type).to.equal('string');
         expect(preparedNodeTypes[0].fields[1].required).to.equal(false);
     });
 
