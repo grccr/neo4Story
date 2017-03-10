@@ -15,7 +15,7 @@ app.get('/config', function (req, res) {
 });
 
 let validationNodesResult = configValidator.validateNodeTypes(config.nodeTypes);
-let validationEdgesResult = configValidator.validateEdgeTypes(config.edgeTypes);
+let validationEdgesResult = configValidator.validateEdgeTypes(config.edgeTypes, config.nodeTypes);
 if (!validationNodesResult.success) console.error('config node types validation failed with: ' + validationNodesResult.message);
 else if (!validationEdgesResult.success) console.error('config edge types validation failed with: ' + validationEdgesResult.message);
 else

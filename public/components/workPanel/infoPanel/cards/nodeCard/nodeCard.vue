@@ -74,6 +74,11 @@
                 return false;
             }
         },
+        watch: {
+            information () {
+                this.activePageIndex = 0;
+            }
+        },
         props: ['information'],
         methods: {
             ...mapActions({
