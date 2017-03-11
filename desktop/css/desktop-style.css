@@ -1,0 +1,10 @@
+.title-header {
+    position: absolute;
+    right: 100px;
+    font-weight: 200;
+    color: white;
+}
+
+body {
+    background-image: url('../img/wall.jpg');
+}

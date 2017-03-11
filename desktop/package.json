@@ -1,0 +1,22 @@
+{
+  "name": "neo4Story-desktop",
+  "version": "0.1.0",
+  "description": "Desktop starter of neo4Story",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/EmpireFallsTechnologies/neo4Story",
+  "keywords": [
+    "neo4Story",
+    "Neo4J",
+    "graph",
+    "sigmajs",
+    "data-journalism"
+  ],
+  "author": "EmpireFallsTechnologies",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.4.1"
+  }
+}
