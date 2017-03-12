@@ -20,6 +20,15 @@ Vue.material.registerTheme('brown', {
     accent: 'white'
 });
 
+Vue.material.registerTheme('blue', {
+    primary: 'blue',
+    accent: 'white'
+});
+// Vue.material.registerTheme('brown', {
+//     primary: 'brown',
+//     accent: 'white'
+// });
+
 
 Vue.config.debug = true;
 Vue.config.devtools = true;

@@ -10,23 +10,16 @@ var Vue = require('vue');
  */
 module.exports = {
     state: {
-        nodeTypes: [],
-        edgeTypes: []
+        config: {}
     },
     mutations: {
-        SET_NODE_TYPES_CONFIGURATION(state, nodeTypes) {
-            Vue.set(state, 'nodeTypes', nodeTypes);
-        },
-        SET_EDGE_TYPES_CONFIGURATION(state, edgeTypes) {
-            Vue.set(state, 'edgeTypes', edgeTypes);
+        SET_APP_CONFIG(state, config) {
+            Vue.set(state, 'config', config);
         }
     },
     actions: {
-        setNodeTypesConfig(store, nodeTypes) {
-            store.commit('SET_NODE_TYPES_CONFIGURATION', nodeTypes);
-        },
-        setEdgeTypesConfig(store, edgeTypes) {
-            store.commit('SET_EDGE_TYPES_CONFIGURATION', edgeTypes);
+        setAppConfig(store, appConfig) {
+            store.commit('SET_APP_CONFIG', appConfig);
         }
     },
     getters: {}
