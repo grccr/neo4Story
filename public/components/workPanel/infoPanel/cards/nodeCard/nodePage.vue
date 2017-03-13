@@ -1,10 +1,10 @@
 <template>
     <div class="general-details-container">
         <md-card-content>
-            <p v-if="information.position"><label class="card-label">Position:</label> {{information.position}}</p>
-            <p v-if="information.birthDate && age"><label class="card-label">Age:</label> {{age}}</p>
-            <p v-if="information.birthDate"><label class="card-label">Birthday:</label> {{information.birthDate}}</p>
-            <p v-if="information.university"><label class="card-label">Education:</label> {{information.university}}</p>
+            <p v-for="fieldName in page.fields" v-if="information[fieldName]">
+                <label class="card-label">{{ fieldAlias(fieldName) }}:</label>
+                {{information[fieldName]}}
+            </p>
         </md-card-content>
     </div>
 </template>
@@ -14,18 +14,18 @@
         data () {
             return {}
         },
-        computed: {
-            age() {
-                let ageDifMs = Date.now() - new Date(this.information.birthDate).getTime();
-                let ageDate = new Date(ageDifMs);
-                return Math.abs(ageDate.getUTCFullYear() - 1970);
-            }
-        },
+        computed: {},
         mounted () {
 
         },
-        props: ['information', 'editable'],
-        methods: {}
+        props: ['information', 'editable', 'page', 'typeConfig'],
+        methods: {
+            fieldAlias (fieldName) {
+                return this.typeConfig.fields.filter((field) => {
+                    return field.name == fieldName;
+                })[0].alias;
+            }
+        }
     }
 </script>
 
