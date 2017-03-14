@@ -6,9 +6,7 @@
 
 **neo4Story** is js-based web-app for browsing and editing neo4j data.
 
-Watch demo! (todo demo)
-
-What do you know about amazing [Neo4j graph database](https://neo4j.com)?
+What do you know about amazing [Neo4J graph database](https://neo4j.com)?
 
 We often tell graph stories using awesome tools such as the [sigmaJs](https://github.com/jacomyal/sigma.js) 
 and [Gephi](https://gephi.org/). 
@@ -21,11 +19,11 @@ So, when we want to do investigation and tell another graph story, we always mee
  
 **neo4Story** is our try to stop this terrible tradition and make some easy-customizable  for it!
 
-So, if you have graph data (in neo4j, graphml, csv, no matters...), it's simple to load your data to neo4j.
+So, if you have graph data (in neo4j-dump, graphml, csv, no matters...), it's simple to load your data to Neo4J.
 
 **neo4Story** just needs a configuration setup to start and sing your data!
 
-**neo4Story** can be launched as nodeJS server via command-line or as desktop application.
+**neo4Story** can be launched as nodeJS server via command-line (late it will be possible with desktop launcher).
 
 #### How to prepare machine to neo4Story?
 
@@ -36,25 +34,27 @@ So, if you have graph data (in neo4j, graphml, csv, no matters...), it's simple 
 
 [In special section](samples/README.md)
 
+#### Preparing of Neo4J
+
+[In special section](DOCS/NEO4J.md)
 
 #### How to run neo4Story?
 
 ```
-# only master branch contains builded artifact (dist/build.js)
-git checkout master
 node devServer.js
 ```
 
+**Note:** only master branch contains artifact of build (dist/build.js)!
+
 #### How to customize neo4Story for your data?
 
-todo
+The only step of this process is described in
+ [Setting Up Configuration Section](DOCS/CONFIG.md)
 
-#### How to develop neo4Story?
 
-[Read in this section](DEVELOP.md)
+#### How to develop (or contribute) neo4Story?
 
-#### How to contribute?
+Always welcome! [Read this section to begin!](DOCS/DEVELOP.md)
 
-todo
 
 
