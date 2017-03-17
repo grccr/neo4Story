@@ -24,9 +24,7 @@ module.exports = {
         },
         ADD_ELEMENT_TO_SELECTION (state, element) {
             let selectedElements = JSON.parse(JSON.stringify(state.selectedElements));
-            console.log(selectedElements);
             selectedElements.selectedd = true;
-            console.log();
             selectedElements.push(element);
             let tempNodes = [];
             state.nodes.forEach((node) => {

@@ -41,14 +41,18 @@
 		methods: {
             ...mapActions({
                 neo4jConfigSet: "neo4jConfigSet",
-                graphConfigSet: "graphConfigSet"
+                graphConfigSet: "graphConfigSet",
+				setNodeTypesConfig: 'setNodeTypesConfig'
             })
 		},
         created () {
             this.$http.get('config').then((response) => {
                 let config = response.body;
+				console.log(config);
             	this.neo4jConfigSet(config);
             	this.graphConfigSet(config);
+				this.setNodeTypesConfig(config.nodeTypesConfig);
+
 
             }, (response) => {})
 

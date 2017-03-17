@@ -1,16 +1,18 @@
 /**
- * Created by nilly on 19/01/17.
+ * Created by lolkasasa on 19/01/17.
  */
 
+// todo normal graph tests
 
 
-import { expect } from 'chai';
+
+// import { expect } from 'chai';
 // var mutations = require('../public/store/modules/graph').mutations;
-var actions = require('../public/store/modules/neo4j').actions;
+// var actions = require('../public/store/modules/neo4j').actions;
 
 // destructure assign mutations
 // const { ADD_NODE } = mutations;
-const {neo4jFullTextSearch, neo4jFindAllMatches} = actions;
+// const {neo4jFullTextSearch, neo4jFindAllMatches} = actions;
 
 // describe('mutations', () => {
 //     it('ADD_NODE2', () => {
@@ -26,13 +28,13 @@ const {neo4jFullTextSearch, neo4jFindAllMatches} = actions;
 //     })
 // });
 
-describe('actions', () => {
-   it('neo4jFullTextSearch',() => {
-       let store = {};
-       let payload = {searchRequest: 'Владимир Мединский'};
-       neo4jFullTextSearch(store, payload).then(result => {
-           console.log(result);
-       });
-
-});
-});
+// describe('actions', () => {
+//    it('neo4jFullTextSearch',() => {
+//        let store = {};
+//        let payload = {searchRequest: ''};
+//        neo4jFullTextSearch(store, payload).then(result => {
+//            console.log(result);
+//        });
+//
+// });
+// });
