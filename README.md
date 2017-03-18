@@ -1,6 +1,9 @@
-# neo4Story
+# neo4Story [![Build Status](https://travis-ci.org/EmpireFallsTechnologies/neo4Story.svg?branch=master)](https://travis-ci.org/EmpireFallsTechnologies/neo4Story)
 
 ### *Let your neo4j graph data sing in this web-app!*
+
+**Build status:**
+
 
 ### What is neo4Story?
 
