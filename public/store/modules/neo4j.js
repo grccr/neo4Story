@@ -164,8 +164,6 @@ module.exports = {
                 edgesMap: {}
             };
             let neo4jData = payload.neo4jData;
-            console.log(neo4jData);
-            console.log('NEO DATA');
             let colorPerson = colorBrewPerson[Math.round(Math.random() * colorBrewPerson.length)];
             let colorCompany = colorBrewCompany[Math.round(Math.random() * colorBrewCompany.length)];
             neo4jData.records.forEach(res => {

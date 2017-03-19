@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: './tests/configValidatorTests',
+    entry: ['./tests/configValidatorTests', './tests/configPreparerTests'],
     output: {
         path: __dirname,
         filename: './tests/bundles/test-bundles.js'
