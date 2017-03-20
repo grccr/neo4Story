@@ -1,6 +1,6 @@
 <template>
     <div class="application-title">
-        Neo4Story
+        {{ appTitle }}
     </div>
 </template>
 
@@ -9,7 +9,11 @@
         data () {
             return {}
         },
-        computed: {},
+        computed: {
+            appTitle () {
+                return this.$store.state.appConfig.config.appTitle;
+            }
+        },
         mounted () {
 
         },

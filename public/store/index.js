@@ -12,6 +12,6 @@ module.exports = new Vuex.Store({
         // addNodeButton: require('./modules/addNode'),
         neo4j: require('./modules/neo4j'),
         edit: require('./modules/edit'),
-        config: require('./modules/config')
+        appConfig: require('./modules/config')
     }
 });

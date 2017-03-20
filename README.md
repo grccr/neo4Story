@@ -12,18 +12,20 @@ What do you know about amazing [Neo4j graph database](https://neo4j.com)?
 
 We often tell graph stories using awesome tools such as the [sigmaJs](https://github.com/jacomyal/sigma.js) 
 and [Gephi](https://gephi.org/). 
-But they provide only the tools of analysis and visualization, while in long connected investigations
- the *data layer is no less important*! 
+But they provide only the tools of analysis and visualization, while in some long connected investigations
+ *the data layer is no less important*! 
 We (as well as thousands of people) find Neo4J is excellent database to store our investigations graph data. 
 
 So, when we want to do investigation and tell another graph story, we always meeting the same problems - how to write cool server-side
  and how to write cool client-side. And every time our web-app code is very similar to previous.
  
-**neo4Story** is our try to stop this terrible tradition and make some boilerplate for it!
+**neo4Story** is our try to stop this terrible tradition and make some easy-customizable  for it!
 
 So, if you have graph data (in neo4j, graphml, csv, no matters...), it's simple to load your data to neo4j.
 
 **neo4Story** just needs a configuration setup to start and sing your data!
+
+**neo4Story** can be launched as nodeJS server via command-line or as desktop application.
 
 #### How to prepare machine to neo4Story?
 
@@ -33,6 +35,7 @@ So, if you have graph data (in neo4j, graphml, csv, no matters...), it's simple 
 #### Samples
 
 [In special section](samples/README.md)
+
 
 #### How to run neo4Story?
 

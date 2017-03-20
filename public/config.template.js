@@ -25,7 +25,7 @@ module.exports = {
                 {
                     name: 'name',        // machine name of field - required!
                     alias: 'Name',       // human name of field - required!
-                    type: String,        // field type - String, Num, Boolean. Default: String
+                    type: 'string',        // field type - String, Num, Boolean. Default: String
                     editControl: editControls.INPUT,    // edit field UI control  Default: 'input'
                     required: false,         // required in create/edit process, Default - false
                     placeholder: 'person name'     // placeholder of editControl
@@ -57,9 +57,11 @@ module.exports = {
                 }
             ],
             color: 'blue',    // pick from vuematerial colors, default - blue
+            icon: 'person',   // if you want use custom icon for your type (like mysupericon.png) - put it's png to public/img/custom-icons and write 'custom-icons/mysupericon.png'
             mainLabelField: 'name',             // mainLabelField and extraMainLabelFields fills card header, mainLabelField is required
             extraMainLabelFields: ['surname'],  // default - []
             subLabelField: 'workplace',         // subLabelField fills card subheader, default - empty
+            searchFields: ['name', 'surname'],  // search row will use this fields for
             pages: [
                 {
                     title: 'Personal',
@@ -85,6 +87,7 @@ module.exports = {
                     alias: 'INN'
                 }
             ],
+            icon: 'factory',
             mainLabelField: 'name',
             color: 'brown',
             pages: [
