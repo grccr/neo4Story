@@ -4,7 +4,7 @@
 
 ### What is neo4Story?
 
-**neo4Story** is js-based web-app for browsing and editing neo4j data.
+**neo4Story** *is js-based web-app for browsing and editing neo4j data*.
 
 What do you know about amazing [Neo4J graph database](https://neo4j.com)?
 
@@ -17,7 +17,7 @@ We (as well as thousands of people) find Neo4J is excellent database to store ou
 So, when we want to do investigation and tell another graph story, we always meeting the same problems - how to write cool server-side
  and how to write cool client-side. And every time our web-app code is very similar to previous.
  
-**neo4Story** is our try to stop this terrible tradition and make some easy-customizable  for it!
+**neo4Story** is our try to stop this terrible tradition and make some easy-customizable app for it!
 
 So, if you have graph data (in neo4j-dump, graphml, csv, no matters...), it's simple to load your data to Neo4J.
 
