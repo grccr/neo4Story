@@ -46,7 +46,7 @@ So, if you have graph data (in neo4j-dump, graphml, csv, no matters...), it's si
 #### How to run neo4Story?
 
 ```
-node devServer.js
+node neo4Story.js
 ```
 
 **Note:** only master branch contains artifact of build (dist/build.js)!

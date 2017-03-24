@@ -10,6 +10,6 @@ For trying of these samples you need to do 3 simple steps:
 3. Run neo4Story!
 
 ```
-node devServer.js
+node neo4Story.js
 ```
 
