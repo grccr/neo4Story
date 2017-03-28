@@ -97,21 +97,14 @@ module.exports = {
 
             queryString += returningSet;
 
-            console.log("DFDSF");
             console.log(queryString);
 
             let session = driver.session();
-            // ,
-            //     name = searchRequest.split(' ')[0],
-            //     surname = searchRequest.split(' ')[1];
-            let extraQueryStr = surname ? (`OR a.name STARTS WITH "${surname}" OR a.surname STARTS WITH "${surname}"`) : '';
-
-            console.log(store.state);
 
 
             return session
                 .run(
-
+                    queryString
                 )
                 .then(result => {
                     return store.dispatch('neo4jResponseParse', {neo4jData: result});
@@ -157,7 +150,8 @@ module.exports = {
             /**
              * Simple search by id
              * @param payload: {
-             *     id: String/int id
+             *     id: String/int id,
+             *     type: nodeType - for index search NOT IMPLEMENTED - need to check importance
              * }
              */
             let neo4j = window.neo4j.v1;
@@ -165,11 +159,13 @@ module.exports = {
                 store.state.neo4jPassword));
             let session = driver.session();
             let id = hashToId(payload.id);
+
+            let query = `MATCH (a) WHERE ID(a) = {id} ` + // ToDo Configurable Query
+                "OPTIONAL MATCH (a)-[b]-(c) " +
+                "RETURN a,b,c";
             return session
                 .run(
-                    "MATCH (a) WHERE ID(a) = {id} " +
-                    "OPTIONAL MATCH (a)-[b]-(c) " +
-                    "RETURN a,b,c", {id}
+                    query, {id}
                 )
                 .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
                 .catch(error => {
@@ -192,6 +188,8 @@ module.exports = {
                 edgesMap: {}
             };
             let neo4jData = payload.neo4jData;
+            let nodeConfig = payload.nodeConfig;
+            let edgeConfig = payload.edgeConfig;
             let colorPerson = colorBrewPerson[Math.round(Math.random() * colorBrewPerson.length)];
             let colorCompany = colorBrewCompany[Math.round(Math.random() * colorBrewCompany.length)];
             neo4jData.records.forEach(res => {
@@ -287,7 +285,6 @@ module.exports = {
                     session.close();
                     throw error;
                 });
-
         },
         neo4jCreateCompany (store, data) {
             let neo4j = window.neo4j.v1;

@@ -14,7 +14,7 @@
                     v-bind:class="{'active': isActive(index)}"
                     @click="matchClick(index)">
                     <button type="button" class="md-button md-button md-list-item-container md-theme-default">
-                        <autocomplete-row :data="match"></autocomplete-row>
+                        <autocomplete-row :information="match"></autocomplete-row>
                     </button>
                 </li>
             </ul>
@@ -52,6 +52,8 @@
                     this.open = true;
                     this.neo4jFullTextSearch({searchRequest: newVal, searchSettings: this.searchSettings})
                             .then((graphResponse) => {
+                                console.log("Response");
+                                console.log(graphResponse);
                                 this.matches = graphResponse.nodes;
                             });
                 }
@@ -90,7 +92,7 @@
                                     return type.searchFields.length > 0;
                                 })
                                 .map((type) => {
-                    return {name: type.value, searchFields: type.searchFields};
+                    return {name: type.name, searchFields: type.searchFields};
                 });
                 return { types: types };
             }
