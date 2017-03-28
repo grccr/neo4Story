@@ -14,11 +14,12 @@
                     v-bind:class="{'active': isActive(index)}"
                     @click="matchClick(index)">
                     <button type="button" class="md-button md-button md-list-item-container md-theme-default">
-                        <autocomplete-row :data="match"></autocomplete-row>
+                        <autocomplete-row :information="match"></autocomplete-row>
                     </button>
                 </li>
             </ul>
         </div>
+        <!--<div v-if="extendable"> Invocation of extended settings panel </div>-->
     </div>
 </template>
 <script>
@@ -33,7 +34,8 @@
                 selection: this.selectedElement ? this.selectedElement : {},
                 current: -1,
                 open: false,
-                ignoreSearchWatch: false
+                ignoreSearchWatch: false,
+                extended: false
             };
         },
         components: {
@@ -48,13 +50,15 @@
                         return;
                     }
                     this.open = true;
-                    this.neo4jFullTextSearch({searchRequest: newVal})
+                    this.neo4jFullTextSearch({searchRequest: newVal, searchSettings: this.searchSettings})
                             .then((graphResponse) => {
+                                console.log("Response");
+                                console.log(graphResponse);
                                 this.matches = graphResponse.nodes;
                             });
                 }
                 this.ignoreSearchWatch = false;
-            },
+            }
         },
         props: {
             labelActive: {
@@ -71,11 +75,26 @@
             },
             selectedElement: {
                 type: Object
+            },
+            extendable: {
+                type: Boolean,
+                default: false
             }
         },
         computed: {
             searchPlaceholder () {
                 return this.$store.state.appConfig.config.searchPlaceholder;
+            },
+            searchSettings () {
+
+                let types = this.$store.state.appConfig.config.nodeTypes
+                                .filter((type) => {
+                                    return type.searchFields.length > 0;
+                                })
+                                .map((type) => {
+                    return {name: type.name, searchFields: type.searchFields};
+                });
+                return { types: types };
             }
         },
         methods: {
@@ -126,7 +145,6 @@
                 }
             },
             matchClick(index) {
-                console.log("D");
                 this.current = index;
                 this.searchRequestEnterPressed();
             },
