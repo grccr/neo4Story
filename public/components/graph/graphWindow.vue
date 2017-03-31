@@ -98,6 +98,7 @@
         mounted () {
             this.$nextTick(function () {
                 var self = this;
+                // todo make custom
                 $sigma.canvas.nodes.image.cacheArray(
                         ['img/pig.png', 'img/person.png', 'img/factory.png'],
                         function () {

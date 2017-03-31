@@ -83,7 +83,7 @@ module.exports = {
             var returningSet = ' return ';
 
             payload.searchSettings.types.forEach((type) => {
-                queryString += ` MATCH (${type.name.toLowerCase()}:${type.name}) Where `;
+                queryString += ` OPTIONAL MATCH (${type.name.toLowerCase()}:${type.name}) Where `;
                 returningSet += `${type.name.toLowerCase()}, `;
                 type.searchFields.forEach((searchField, i) => {
                     searchItems.forEach((searchItem, j) => {
