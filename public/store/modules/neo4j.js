@@ -95,7 +95,7 @@ module.exports = {
             });
 
             returningSet = returningSet.slice(0, returningSet.length-2);
-            returningSet += ' limit 10';
+            returningSet += ' limit 50';
 
             queryString += returningSet;
             let session = driver.session();
