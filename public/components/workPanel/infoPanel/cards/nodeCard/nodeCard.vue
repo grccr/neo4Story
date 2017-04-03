@@ -31,8 +31,8 @@
 
             <md-card-header>
                 <md-card-header-text>
-                    <div class="md-title" v-if="label">{{label}}</div>
-                    <div class="md-subhead" v-if="sublabel">{{sublabel}}</div>
+                    <div class="md-title" v-if="information.label">{{information.label}}</div>
+                    <div class="md-subhead" v-if="information.sublabel">{{information.sublabel}}</div>
                 </md-card-header-text>
 
                 <md-card-media v-if="information.avatar" class="person-avatar">
@@ -72,20 +72,6 @@
             activePage () {
                 if (this.typeConfig) return this.typeConfig.pages[this.activePageIndex];
                 return false;
-            },
-            label () {
-                var extra = '';
-                if(this.typeConfig.extraMainLabelFields)
-                    this.typeConfig.extraMainLabelFields.forEach((extraField) => {
-                        if (this.information[extraField])
-                            extra += this.information[extraField] + ' ';
-                    });
-                if (extra)  extra = extra.slice(0, -1);
-                return this.information[this.typeConfig.mainLabelField] + ' ' + extra;
-            },
-            sublabel() {
-                if(this.typeConfig.subLabelField) return this.information[this.typeConfig.subLabelField];
-                return '';
             }
         },
         props: ['information'],
@@ -93,12 +79,12 @@
             ...mapActions({
                 exploreNode: "exploreNode",
                 neo4jSearchById: "neo4jSearchById",
-                selectNodes: 'selectNodes',
                 addSubGraphById: 'addSubGraphById',
-                setWorkMode: 'setWorkMode'
+                setWorkMode: 'setWorkMode',
+                resetSelection: 'resetSelection'
             }),
             closeButtonClick () {
-                this.selectNodes([]);
+                this.resetSelection();
                 this.setWorkMode({workMode: 'none'});
             },
             switchDetails (index) {

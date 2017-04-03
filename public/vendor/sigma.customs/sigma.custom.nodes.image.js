@@ -68,11 +68,37 @@ sigma.canvas.nodes.image = (function() {
                     Math.PI * 2,
                     true
                 );
-
                 // border
                 context.lineWidth = size * node.borderWidth * 0.05;
                 context.strokeStyle = node.borderColor || '#fff';
                 context.stroke();
+
+
+                if(node.selected) {
+                    var labelFontSize,
+                        prefix = settings('prefix') || '',
+                        size = node[prefix + 'size'];
+
+                    // BORDER STUFF
+                    // context.fillStyle = node.color || settings('defaultNodeColor');
+                    context.beginPath();
+                    context.arc(
+                        node[prefix + 'x'],
+                        node[prefix + 'y'],
+                        1.4*node[prefix + 'size'],
+                        0,
+                        Math.PI * 2,
+                        true
+                    );
+
+                    context.closePath();
+                    // context.fill();
+
+                    // Adding a border
+                    context.lineWidth = size*0.4;
+                    context.strokeStyle = node.hoverBorderColor || '#fff';
+                    context.stroke();
+                }
 
             } else {
                 sigma.canvas.nodes.image.cache(url);

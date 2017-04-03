@@ -50,13 +50,16 @@ module.exports = {
     },
     mutations: {
         SET_NEO4J_CONFIG (state, payload) {
-            console.log(payload);
             Vue.set(state, "neo4jUrl", payload.neo4jConfig.neo4jUrl);
             Vue.set(state, "neo4jLogin", payload.neo4jConfig.neo4jLogin);
             Vue.set(state, "neo4jPassword", payload.neo4jConfig.neo4jPassword);
         }
     },
-    getters: {},
+    getters: {
+        appConfig(state, getters, rootState, rootGetters) {
+            return rootState.appConfig.config;
+        }
+    },
     actions: {
         neo4jConfigSet (store, payload) {
             store.commit('SET_NEO4J_CONFIG', payload);
@@ -70,7 +73,6 @@ module.exports = {
              * }
              * @return Promise
              */
-            console.log(payload);
             let neo4j = window.neo4j.v1;
             let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
                 store.state.neo4jPassword));
@@ -80,7 +82,7 @@ module.exports = {
             var returningSet = ' return ';
 
             payload.searchSettings.types.forEach((type) => {
-                queryString += ` MATCH (${type.name.toLowerCase()}:${type.name}) Where `;
+                queryString += ` OPTIONAL MATCH (${type.name.toLowerCase()}:${type.name}) Where `;
                 returningSet += `${type.name.toLowerCase()}, `;
                 type.searchFields.forEach((searchField, i) => {
                     searchItems.forEach((searchItem, j) => {
@@ -93,17 +95,14 @@ module.exports = {
             });
 
             returningSet = returningSet.slice(0, returningSet.length-2);
-            returningSet += ' limit 10';
+            returningSet += ' limit 50';
 
             queryString += returningSet;
-
-
             let session = driver.session();
-
-
-
             return session
-                .run(queryString)
+                .run(
+                    queryString
+                )
                 .then(result => {
                     return store.dispatch('neo4jResponseParse', {neo4jData: result});
                 })
@@ -148,7 +147,8 @@ module.exports = {
             /**
              * Simple search by id
              * @param payload: {
-             *     id: String/int id
+             *     id: String/int id,
+             *     type: nodeType - for index search NOT IMPLEMENTED - need to check importance
              * }
              */
             let neo4j = window.neo4j.v1;
@@ -156,11 +156,13 @@ module.exports = {
                 store.state.neo4jPassword));
             let session = driver.session();
             let id = hashToId(payload.id);
+
+            let query = `MATCH (a) WHERE ID(a) = {id} ` + // ToDo Configurable Query
+                "OPTIONAL MATCH (a)-[b]-(c) " +
+                "RETURN a,b,c";
             return session
                 .run(
-                    "MATCH (a) WHERE ID(a) = {id} " +
-                    "OPTIONAL MATCH (a)-[b]-(c) " +
-                    "RETURN a,b,c", {id}
+                    query, {id}
                 )
                 .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
                 .catch(error => {
@@ -183,8 +185,16 @@ module.exports = {
                 edgesMap: {}
             };
             let neo4jData = payload.neo4jData;
-            let colorPerson = colorBrewPerson[Math.round(Math.random() * colorBrewPerson.length)];
-            let colorCompany = colorBrewCompany[Math.round(Math.random() * colorBrewCompany.length)];
+            let nodeTypes = store.getters.appConfig.nodeTypes;
+            let edgeTypes = store.getters.appConfig.edgeTypes;
+
+            let colors = {};
+            nodeTypes.forEach((type, i) => {
+                if (i % 2 == 0)
+                    colors[type.name] = colorBrewPerson[Math.round(Math.random() * colorBrewPerson.length)];
+                else
+                    colors[type.name] = colorBrewCompany[Math.round(Math.random() * colorBrewCompany.length)];
+            });
             neo4jData.records.forEach(res => {
                 res._fields.forEach(field => {
                     if (field) {
@@ -194,32 +204,52 @@ module.exports = {
                             if (!(nodeData.id in graph.nodesMap)) {
                                 graph.nodesMap[nodeData.id] = nodeData;
                                 nodeData.semantic_type = field.labels[0];
+                                let match = nodeTypes.filter((type) => {
+                                    return type.name == nodeData.semantic_type
+                                });
+                                let typeConfig = match[0];
+
+                                var extra = '';
+                                if(typeConfig.extraMainLabelFields)
+                                    typeConfig.extraMainLabelFields.forEach((extraField) => {
+                                        if (nodeData[extraField])
+                                            extra += nodeData[extraField] + ' ';
+                                    });
+                                if (extra) extra = extra.slice(0, -1);
+
+
+                                nodeData.label = nodeData[typeConfig.mainLabelField] + ' ' + extra;
+                                nodeData.sublabel = '';
+                                nodeData.sublabel = typeConfig.subLabelField ? nodeData[typeConfig.subLabelField] : '';
+
                                 nodeData.x = Math.random() * 0.5;
                                 nodeData.y = Math.random() * 0.5;
-                                nodeData.image = 'img/pig.png'; // default for fast detecting
-                                if (nodeData.semantic_type == "Person") {
-                                    nodeData.image = 'img/person.png';
-                                    nodeData.color = colorPerson;
-                                }
-                                if (nodeData.semantic_type == "Company") {
-                                    nodeData.image = 'img/factory.png';
-                                    nodeData.color = colorCompany;
-                                }
+
+                                nodeData.image = typeConfig.nodeIcon ? 'img/' + typeConfig.nodeIcon + '.png' : 'img/pig.png';
+
+                                nodeData.color = colors[typeConfig.name];
+
                                 nodeData.size = 10;
                                 nodeData.hoverBorderColor = nodeData.color;
                                 nodeData.type = 'image';
 
-                                nodeData.label = (nodeData.name || '') + ' ' + (nodeData.surname || '');
                                 graph.nodes.push(nodeData);
                             }
                         }
                         else {
+
+
+                            let match = edgeTypes.filter((type) => {
+
+                                return type.name == field.type;
+                            });
+                            let typeConfig = match[0];
                             let edgeData = {
                                 source: idToHash(field.start),
                                 target: idToHash(field.end),
                                 color: '#acacaf',
                                 type: "def",
-                                label: type_trans[field.type],
+                                label: typeConfig ? typeConfig.value : '',
                                 semantic_type: field.type,
                                 id: idToHash(field.start) + '_' + idToHash(field.end),
                                 // id: field.properties.id,
@@ -239,9 +269,6 @@ module.exports = {
             let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
                 store.state.neo4jPassword));
             let session = driver.session();
-
-            // console.log(data);
-
             let id = data.source + '_' + data.target;
             let source = hashToId(data.source);
             let target = hashToId(data.target);
@@ -252,7 +279,6 @@ module.exports = {
                 WHERE ID(a) = {source} AND ID(b) = {target}
                 CREATE (a)-[r:${label} {id: {id}, comment: {comment}}]->(b) RETURN r`;
 
-            // console.log(queryStr);
 
             return session.run(queryStr, {source, target, id, comment})
                 .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
@@ -278,7 +304,6 @@ module.exports = {
                     session.close();
                     throw error;
                 });
-
         },
         neo4jCreateCompany (store, data) {
             let neo4j = window.neo4j.v1;

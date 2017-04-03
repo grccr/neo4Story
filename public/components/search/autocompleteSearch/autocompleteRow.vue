@@ -1,7 +1,7 @@
 <template>
         <div class="md-list-item-holder">
-            {{ data.name }} {{ data.surname}}
-            <div v-if="data.workplace" class="additional-label"> {{ data.workplace }} </div>
+            {{ information.label }}
+            <div v-if="information.sublabel" class="additional-label"> {{ information.sublabel }} </div>
         </div>
 </template>
 <script>
@@ -10,8 +10,15 @@
             return {}
         },
         components: {},
-        computed: {},
-        props: ['data'],
+        computed: {
+            typeConfig () {
+                let match = this.$store.state.appConfig.config.nodeTypes.filter((type) => {
+                    return type.name == this.information.semantic_type;
+                });
+                return match.length > 0 ? match[0] : false;
+            }
+        },
+        props: ['information'],
         methods: {}
     }
 </script>
