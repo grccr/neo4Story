@@ -11,9 +11,15 @@
                 <md-tooltip md-direction="top">Close</md-tooltip>
             </md-button>
         </md-toolbar>
-        <div class="radio-container">
-            <md-radio v-model="radioType" id="my-test1" name="my-test-group1" md-value="Person" @change="radioButtonChange">Person</md-radio>
-            <md-radio v-model="radioType" id="my-test2" name="my-test-group1" md-value="Company" @change="radioButtonChange">Company</md-radio>
+        <!--<div class="radio-container">-->
+            <!--<md-radio v-model="radioType" id="my-test1" name="my-test-group1" md-value="Person" @change="radioButtonChange">Person</md-radio>-->
+            <!--<md-radio v-model="radioType" id="my-test2" name="my-test-group1" md-value="Company" @change="radioButtonChange">Company</md-radio>-->
+        <!--</div>-->
+        <div class="type-select-container">
+            <label for="node-type-select" class="semantic-type-select-label">Node type:</label>
+            <md-select name="node-type-select" id="node-type-select" v-model="nodeType">
+                <md-option v-bind:class="{'oriented-type': type.oriented}" v-for="type in availableTypes" :value="type" >{{type.name}}</md-option>
+            </md-select>
         </div>
         <create-person v-if="radioType == 'Person'"></create-person>
         <!--<create-company></create-company>-->
@@ -27,15 +33,20 @@
     export default{
         data() {
             return {
-                radioType: "Person"
+                nodeType: ""
             };
         },
         components: {
-            createPerson: require('./nodeTypes/createPerson.vue'),
-            createCompany: require('./nodeTypes/createCompany.vue'),
+//            createPerson: require('./nodeTypes/createPerson.vue'),
+//            createCompany: require('./nodeTypes/createCompany.vue'),
+            inputCard: require('./inputCard.vue'),
         },
 
-        computed: {},
+        computed: {
+            availableTypes(){
+                return this.$store.state.appConfig.config.nodeTypes;
+            }
+        },
 
         methods: {
             ...mapActions({
