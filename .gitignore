@@ -9,3 +9,4 @@ public/config.js
 **.log
 
 public/img/custom-icons
+/public/dist/build.js
