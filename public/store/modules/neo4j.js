@@ -288,41 +288,20 @@ module.exports = {
                 });
 
         },
-        neo4jCreatePerson (store, data) {
+        neo4jCreateNode (store, data) {
             let neo4j = window.neo4j.v1;
             let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
                 store.state.neo4jPassword));
             let session = driver.session();
 
-            return session
-                .run(
-                    "CREATE (a:Person {data}) RETURN a",
-                    {data: data}
-                )
-                .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
-                .catch(error => {
-                    session.close();
-                    throw error;
-                });
-        },
-        neo4jCreateCompany (store, data) {
-            let neo4j = window.neo4j.v1;
-            let driver = neo4j.driver(store.state.neo4jUrl, neo4j.auth.basic(store.state.neo4jLogin,
-                store.state.neo4jPassword));
-            let session = driver.session();
-
-            let name = data.name;
-            let inn = data.inn;
-            let country = data.country;
-            let city = data.city;
-            let description = data.description;
-            let url = data.url;
+            let nodeType = data.nodeType;
+            let nodeData = data.nodeData;
+            let queryStr = `CREATE (a:${nodeType} {nodeData}) RETURN a`;
 
             return session
                 .run(
-                    "CREATE (a:Company {name: {name}, inn: {inn}, country: {country}, " +
-                    "description: {description}, city: {city}, url:{url}}) RETURN a",
-                    {name, inn, country, description, city, url}
+                    queryStr,
+                    {nodeData: nodeData}
                 )
                 .then(result => store.dispatch('neo4jResponseParse', {neo4jData: result}))
                 .catch(error => {
