@@ -93,13 +93,11 @@
         padding-left: 4%;
         padding-right: 8%;
         padding-top: 6%;
-        padding-bottom: 10%;
+        overflow: auto;
+        max-height: 60%;
+        /*padding-bottom: 10%;*/
     }
 
-    .input-card{
-        height: 100%;
-        width: 100%;
-    }
 
     #create-person-inputs .confirm-button {
         margin-bottom: 3%;
