@@ -30,26 +30,26 @@
 
 <style>
     /*.data-input {*/
-        /*font-size: 18px !important;*/
+    /*font-size: 18px !important;*/
     /*}*/
 
     /*.data-input::-webkit-input-placeholder {*/
-        /*!*font-size: 18px !important;*!*/
-        /*font-family: Roboto;*/
+    /*!*font-size: 18px !important;*!*/
+    /*font-family: Roboto;*/
     /*}*/
 
     /*.data-row-container {*/
-        /*!*width: 19%;*!*/
-        /*margin-left: 10px;*/
-        /*margin-right: 20px;*/
-        /*margin-top: 40px;*/
-        /*margin-buttom: 80px;*/
-        /*z-index: 10;*/
-        /*margin-bottom: 10px;*/
+    /*!*width: 19%;*!*/
+    /*margin-left: 10px;*/
+    /*margin-right: 20px;*/
+    /*margin-top: 40px;*/
+    /*margin-buttom: 80px;*/
+    /*z-index: 10;*/
+    /*margin-bottom: 10px;*/
     /*}*/
 
     /*.data-label {*/
-        /*top: -3px !important;*/
+    /*top: -3px !important;*/
     /*}*/
 
 </style>

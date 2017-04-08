@@ -1,7 +1,12 @@
 
 <template>
-    <div class="input-card-container">
-        <dataInput v-for="field in fields" :field="field" :ref="field.name"></dataInput>
+    <div class="fields-card-container">
+        <div class="field-control" v-for="field in fields">
+            <data-input :field="field" :ref="field.name" v-if="field.editControl == 'input'"></data-input>
+            <data-select :field="field" :ref="field.name" v-if="field.editControl == 'select'"></data-select>
+            <data-datepicker :field="field" :ref="field.name" v-if="field.editControl == 'datepicker'"></data-datepicker>
+            <data-range :field="field" :ref="field.name" v-if="field.editControl == 'range'"></data-range>
+        </div>
     </div>
 </template>
 <script>
@@ -12,20 +17,22 @@
             return {}
         },
         components: {
-            dataInput: require('./dataInput.vue')
+            dataInput: require('./editControls/inputControl.vue'),
+            dataSelect: require('./editControls/selectControl.vue'),
+            dataDatepicker: require('./editControls/datepickerControl.vue'),
+            dataRange: require('./editControls/rangeControl.vue')
         },
 
         computed: {
             fields (){
-                console.log('computing fields');
-                console.log(this.nodeType.fields);
-                return this.nodeType.fields
+                return this.typeConfig.fields;
             }
         },
 
-        methods: {},
+        methods: {
+        },
         props: {
-            nodeType:{
+            typeConfig: {
                 type: Object
             }
         }
