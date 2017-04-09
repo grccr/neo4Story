@@ -14,6 +14,7 @@ module.exports = {
     },
     mutations: {
         SWITCH_NODE_TYPE(state, nodeType) {
+            //possible deprecated and useless 26.02.2017
             Vue.set(state, 'nodeType', nodeType);
         },
         SET_WORK_MODE (state, workMode) {
