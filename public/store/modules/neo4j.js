@@ -297,7 +297,6 @@ module.exports = {
             let nodeType = data.nodeType;
             let nodeData = data.nodeData;
             let queryStr = `CREATE (a:${nodeType} {nodeData}) RETURN a`;
-
             return session
                 .run(
                     queryStr,
