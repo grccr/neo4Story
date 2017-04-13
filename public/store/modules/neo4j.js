@@ -84,20 +84,33 @@ module.exports = {
             payload.searchSettings.types.forEach((type) => {
                 queryString += ` OPTIONAL MATCH (${type.name.toLowerCase()}:${type.name}) Where `;
                 returningSet += `${type.name.toLowerCase()}, `;
-                type.searchFields.forEach((searchField, i) => {
+                let i = 0;
+                type.swSearchFields.forEach((searchField) => {
                     searchItems.forEach((searchItem, j) => {
                         if (i == 0 && j == 0)
                             queryString += `${type.name.toLowerCase()}.${searchField} STARTS WITH "${searchItem}" `;
                         else
                             queryString += ` OR ${type.name.toLowerCase()}.${searchField} STARTS WITH "${searchItem}" `;
+                        i += 1;
                     });
                 });
+                type.conSearchFields.forEach((searchField) => {
+                    searchItems.forEach((searchItem, j) => {
+                        if (i == 0 && j == 0)
+                            queryString += `${type.name.toLowerCase()}.${searchField} CONTAINS "${searchItem}" `;
+                        else
+                            queryString += ` OR ${type.name.toLowerCase()}.${searchField} CONTAINS "${searchItem}" `;
+                        i += 1;
+                    });
+                });
+
             });
 
             returningSet = returningSet.slice(0, returningSet.length-2);
             returningSet += ' limit 50';
 
             queryString += returningSet;
+            console.log(queryString);
             let session = driver.session();
             return session
                 .run(
@@ -116,6 +129,7 @@ module.exports = {
              * Use it for find any matched nodes in neo4j with search request from payload
              * @param payload: {
              *     searchRequest: String,
+             *     typeConfig: Object with node types
              *     withEdges: boolean (default: true) - NOT IMPLEMENTED!
              * }
              */

@@ -6,19 +6,9 @@
             <h3 class="md-title" style="flex: 1"> {{typeConfig.value}} </h3>
 
 
-            <md-button class="md-icon-button" @click="editNodeClicked">
+            <md-button class="md-icon-button" @click="editEdgeClicked">
                 <md-icon>mode_edit</md-icon>
                 <md-tooltip md-direction="top">Edit</md-tooltip>
-            </md-button>
-
-            <md-button class="md-icon-button" @click="exploreNodeClicked">
-                <md-icon>people</md-icon>
-                <md-tooltip md-direction="top">Explore relationships</md-tooltip>
-            </md-button>
-
-            <md-button class="md-icon-button" @click="addEdgeClicked">
-                <md-icon>link</md-icon>
-                <md-tooltip md-direction="top">Add relationship</md-tooltip>
             </md-button>
 
             <md-button class="md-icon-button" v-on:click="closeButtonClick">
@@ -40,7 +30,7 @@
                 </md-card-media>
             </md-card-header>
 
-            <node-page :information="information" :page="activePage" :editable="editable" :typeConfig="typeConfig"></node-page>
+            <edge-page :information="information" :page="activePage" :editable="editable" :typeConfig="typeConfig"></edge-page>
             <md-bottom-bar md-shift @change="switchDetails" :md-theme="typeConfig.color">
                 <md-bottom-bar-item :md-icon="page.icon" md-active v-for="(page, index) in typeConfig.pages">{{ page.title }}</md-bottom-bar-item>
             </md-bottom-bar>
@@ -60,11 +50,11 @@
             }
         },
         components: {
-            nodePage: require('./nodePage.vue')
+            edgePage: require('./edgePage.vue')
         },
         computed: {
             typeConfig () {
-                let match = this.$store.state.appConfig.config.nodeTypes.filter((type) => {
+                let match = this.$store.state.appConfig.config.edgeTypes.filter((type) => {
                     return type.name == this.information.semantic_type
                 });
                 return match.length > 0 ? match[0] : false;
@@ -91,7 +81,7 @@
                 this.activePageIndex = index;
             },
             exploreNodeClicked(){
-                let selectedElements = this.$store.state.graph.selectedNodes;
+                let selectedElements = this.$store.state.graph.selectedElements;
                 this.addSubGraphById({id: selectedElements[0].id});
             },
             deleteNodeClicked(){
