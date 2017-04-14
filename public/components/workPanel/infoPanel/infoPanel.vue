@@ -25,9 +25,9 @@
                 return this.$store.state.edit.workMode;
             },
             edgeInformation () {
-                let selectedNodes = this.$store.state.graph.selectedEdges;
+                let selectedEdges = this.$store.state.graph.selectedEdges;
 //                let selectedNodes = this.$store.state.graph.nodes.filter((node) => selectedIds.includes(node.id));
-                return selectedNodes[0];
+                return selectedEdges[0][0];
             }
         },
         methods: {

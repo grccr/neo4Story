@@ -2,8 +2,8 @@
     <div v-if="typeConfig">
         <md-toolbar class="md-dense" :md-theme="typeConfig.color">
 
-            <md-icon class="semantic-type-icon"> {{typeConfig.cardIcon}} </md-icon>
-            <h3 class="md-title" style="flex: 1"> {{typeConfig.value}} </h3>
+            <!--&lt;!&ndash;<md-icon class="semantic-type-icon"> {{typeConfig.cardIcon}} </md-icon>&ndash;&gt;-->
+            <!--<h3 class="md-title" style="flex: 1"> {{typeConfig.value}} </h3>-->
 
 
             <md-button class="md-icon-button" @click="editEdgeClicked">
@@ -31,9 +31,9 @@
             </md-card-header>
 
             <edge-page :information="information" :page="activePage" :editable="editable" :typeConfig="typeConfig"></edge-page>
-            <md-bottom-bar md-shift @change="switchDetails" :md-theme="typeConfig.color">
-                <md-bottom-bar-item :md-icon="page.icon" md-active v-for="(page, index) in typeConfig.pages">{{ page.title }}</md-bottom-bar-item>
-            </md-bottom-bar>
+            <!--<md-bottom-bar md-shift @change="switchDetails" :md-theme="typeConfig.color">-->
+                <!--<md-bottom-bar-item :md-icon="page.icon" md-active v-for="(page, index) in typeConfig.pages">{{ page.title }}</md-bottom-bar-item>-->
+            <!--</md-bottom-bar>-->
 
         </md-card>
     </div>
@@ -55,7 +55,8 @@
         computed: {
             typeConfig () {
                 let match = this.$store.state.appConfig.config.edgeTypes.filter((type) => {
-                    return type.name == this.information.semantic_type
+                    let res = (type.name == this.information.semantic_type);
+                    return res
                 });
                 return match.length > 0 ? match[0] : false;
             },
@@ -90,7 +91,7 @@
             addEdgeClicked(){
                 this.setWorkMode({workMode: 'addEdge'});
             },
-            editNodeClicked(){
+            editEdgeClicked(){
 
             }
         }

@@ -110,7 +110,6 @@ module.exports = {
             returningSet += ' limit 50';
 
             queryString += returningSet;
-            console.log(queryString);
             let session = driver.session();
             return session
                 .run(
@@ -258,17 +257,16 @@ module.exports = {
                                 return type.name == field.type;
                             });
                             let typeConfig = match[0];
-                            let edgeData = {
-                                source: idToHash(field.start),
-                                target: idToHash(field.end),
-                                color: '#acacaf',
-                                type: "def",
-                                label: typeConfig ? typeConfig.value : '',
-                                semantic_type: field.type,
-                                id: idToHash(field.start) + '_' + idToHash(field.end),
-                                // id: field.properties.id,
-                                size: 500
-                            };
+                            let edgeData = Object.assign({}, defEdge, field.properties);
+                            edgeData.source = idToHash(field.start);
+                            edgeData.target = idToHash(field.end);
+                            edgeData.color = '#acacaf';
+                            edgeData.type = "def";
+                            edgeData.label = typeConfig ? typeConfig.value : '';
+                            edgeData.semantic_type = field.type;
+                            edgeData.id = idToHash(field.start) + '_' + idToHash(field.end);
+                            // // id: field.properties.id,
+                            edgeData.size = 500;
                             graph.edges.push(edgeData);
                             graph.edgesMap[edgeData.id] = edgeData;
                         }
