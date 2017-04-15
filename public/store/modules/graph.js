@@ -24,6 +24,8 @@ module.exports = {
 
         },
         ADD_NODE_TO_SELECTION (state, element) {
+            console.log(element);
+            console.log(JSON.stringify(element));
             let selectedElements = JSON.parse(JSON.stringify(state.selectedNodes));
             selectedElements.selectedd = true;
             selectedElements.push(element);
@@ -35,10 +37,16 @@ module.exports = {
                 }
                 tempNodes.push(node);
             });
+            console.log(selectedElements);
+            console.log(JSON.stringify(selectedElements));
+            console.log(tempNodes);
+            console.log(JSON.stringify(tempNodes));
             Vue.set(state, 'selectedNodes', selectedElements);
             Vue.set(state, 'nodes', tempNodes);
         },
         ADD_EDGE_TO_SELECTION (state, element) {
+            console.log(element);
+            console.log(JSON.stringify(element));
             let selectedElements = JSON.parse(JSON.stringify(state.selectedNodes));
             selectedElements.selectedd = true;
             selectedElements.push(element);
@@ -50,6 +58,8 @@ module.exports = {
                 }
                 tempEdges.push(edge);
             });
+            console.log(JSON.stringify(selectedElements));
+            console.log(JSON.stringify(tempEdges));
             Vue.set(state, 'selectedEdges', selectedElements);
             Vue.set(state, 'edges', tempEdges);
         },
