@@ -6,7 +6,8 @@ var Vue = require('vue');
 
 module.exports = {
     state: {
-        selectedElements: [],
+        selectedNodes: [],
+        selectedEdges: [],
         nodes: [], //rawData.nodes,
         edges: [],  //rawData.edges,
         nodesMap: {},
@@ -22,8 +23,8 @@ module.exports = {
         UPDATE_NODES (state, payload) {
 
         },
-        ADD_ELEMENT_TO_SELECTION (state, element) {
-            let selectedElements = JSON.parse(JSON.stringify(state.selectedElements));
+        ADD_NODE_TO_SELECTION (state, element) {
+            let selectedElements = JSON.parse(JSON.stringify(state.selectedNodes));
             selectedElements.selectedd = true;
             selectedElements.push(element);
             let tempNodes = [];
@@ -34,17 +35,39 @@ module.exports = {
                 }
                 tempNodes.push(node);
             });
-            Vue.set(state, 'selectedElements', selectedElements);
+            Vue.set(state, 'selectedNodes', selectedElements);
             Vue.set(state, 'nodes', tempNodes);
+        },
+        ADD_EDGE_TO_SELECTION (state, element) {
+            let selectedElements = JSON.parse(JSON.stringify(state.selectedEdges));
+            selectedElements.selectedd = true;
+            selectedElements.push(element);
+            let tempEdges = [];
+            state.edges.forEach((edge) => {
+                // node.selected = false;
+                if (edge.id == element.id){
+                    edge.selected = true;
+                }
+                tempEdges.push(edge);
+            });
+            Vue.set(state, 'selectedEdges', selectedElements);
+            Vue.set(state, 'edges', tempEdges);
         },
         RESET_SELECTION (state) {
             let tempNodes = [];
+            let tempEdges = [];
             state.nodes.forEach((node) => {
                 node.selected = false;
                 tempNodes.push(node);
             });
+            state.edges.forEach((edge) => {
+                edge.selected = false;
+                tempEdges.push(edge);
+            });
             Vue.set(state, 'nodes', tempNodes);
-            Vue.set(state, 'selectedElements', []);
+            Vue.set(state, 'edges', tempEdges);
+            Vue.set(state, 'selectedNodes', []);
+            Vue.set(state, 'selectedEdges', []);
         },
         SET_GRAPH(state, graph){
             Vue.set(state, 'nodes', graph.nodes);
@@ -139,8 +162,11 @@ module.exports = {
             //         .then(graph =>  store.commit("UPDATE_GRAPH", graph));
             // }
         },
-        addElementToSelection (store, element) {
-            store.commit("ADD_ELEMENT_TO_SELECTION", element);
+        addNodeToSelection (store, element) {
+            store.commit("ADD_NODE_TO_SELECTION", element);
+        },
+        addEdgeToSelection (store, element) {
+            store.commit("ADD_EDGE_TO_SELECTION", element);
         },
         resetSelection (store) {
             store.commit("RESET_SELECTION");

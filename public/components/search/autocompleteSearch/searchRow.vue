@@ -87,10 +87,14 @@
 
                 let types = this.$store.state.appConfig.config.nodeTypes
                                 .filter((type) => {
-                                    return type.searchFields.length > 0;
+                                    return type.conSearchFields.length > 0 || type.swSearchFields.length > 0;
                                 })
                                 .map((type) => {
-                    return {name: type.name, searchFields: type.searchFields};
+                    return {
+                        name: type.name,
+                        conSearchFields: type.conSearchFields,
+                        swSearchFields: type.swSearchFields
+                    };
                 });
                 return { types: types };
             }

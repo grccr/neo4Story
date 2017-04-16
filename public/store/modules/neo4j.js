@@ -84,14 +84,26 @@ module.exports = {
             payload.searchSettings.types.forEach((type) => {
                 queryString += ` OPTIONAL MATCH (${type.name.toLowerCase()}:${type.name}) Where `;
                 returningSet += `${type.name.toLowerCase()}, `;
-                type.searchFields.forEach((searchField, i) => {
+                let i = 0;
+                type.swSearchFields.forEach((searchField) => {
                     searchItems.forEach((searchItem, j) => {
                         if (i == 0 && j == 0)
                             queryString += `${type.name.toLowerCase()}.${searchField} STARTS WITH "${searchItem}" `;
                         else
                             queryString += ` OR ${type.name.toLowerCase()}.${searchField} STARTS WITH "${searchItem}" `;
+                        i += 1;
                     });
                 });
+                type.conSearchFields.forEach((searchField) => {
+                    searchItems.forEach((searchItem, j) => {
+                        if (i == 0 && j == 0)
+                            queryString += `${type.name.toLowerCase()}.${searchField} CONTAINS "${searchItem}" `;
+                        else
+                            queryString += ` OR ${type.name.toLowerCase()}.${searchField} CONTAINS "${searchItem}" `;
+                        i += 1;
+                    });
+                });
+
             });
 
             returningSet = returningSet.slice(0, returningSet.length-2);
@@ -116,6 +128,7 @@ module.exports = {
              * Use it for find any matched nodes in neo4j with search request from payload
              * @param payload: {
              *     searchRequest: String,
+             *     typeConfig: Object with node types
              *     withEdges: boolean (default: true) - NOT IMPLEMENTED!
              * }
              */
@@ -244,17 +257,16 @@ module.exports = {
                                 return type.name == field.type;
                             });
                             let typeConfig = match[0];
-                            let edgeData = {
-                                source: idToHash(field.start),
-                                target: idToHash(field.end),
-                                color: '#acacaf',
-                                type: "def",
-                                label: typeConfig ? typeConfig.value : '',
-                                semantic_type: field.type,
-                                id: idToHash(field.start) + '_' + idToHash(field.end),
-                                // id: field.properties.id,
-                                size: 500
-                            };
+                            let edgeData = Object.assign({}, defEdge, field.properties);
+                            edgeData.source = idToHash(field.start);
+                            edgeData.target = idToHash(field.end);
+                            edgeData.color = '#acacaf';
+                            edgeData.type = "def";
+                            edgeData.label = typeConfig ? typeConfig.value : '';
+                            edgeData.semantic_type = field.type;
+                            edgeData.id = idToHash(field.start) + '_' + idToHash(field.end);
+                            // // id: field.properties.id,
+                            edgeData.size = 500;
                             graph.edges.push(edgeData);
                             graph.edgesMap[edgeData.id] = edgeData;
                         }
