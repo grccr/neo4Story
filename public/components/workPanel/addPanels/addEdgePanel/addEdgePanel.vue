@@ -41,7 +41,7 @@
                     <div class="type-select-container">
                         <label for="semantic-type-select" class="semantic-type-select-label">Relationship type:</label>
                         <md-select :disabled="!inputsActivated" name="semantic-type-select" id="semantic-type-select" v-model="selectedTypeName">
-                            <md-option v-bind:class="{'oriented-type': type.oriented}" v-for="type in availableTypes" :value="type.name" >{{type.value}}</md-option>
+                            <md-option :disabled="type.from == 1" v-bind:class="{'oriented-type': type.oriented}" v-for="type in availableTypes" :value="type.name" >{{type.value}}</md-option>
                         </md-select>
                     </div>
                     <!--<md-input-container class="search-row-container">-->
@@ -143,6 +143,16 @@
                                         oriented: edgeType.oriented,
                                         fields: edgeType.fields
                                     });}
+                                else {
+                                    toReturn.push({
+                                        from: '',
+                                        to: '',
+                                        value: edgeType.value,
+                                        name: edgeType.name,
+                                        oriented: edgeType.oriented,
+                                        fields: edgeType.fields
+                                    });
+                                }
                             }
 
                         }
@@ -197,12 +207,6 @@
                     newEdge.edgeType = this.selectedTypeName;
                     this.addNewEdge(newEdge);
                 }
-//                this.addNewEdge({
-//                    source: this.selectedNodes[0].id,
-//                    target: this.selectedNodes[1].id,
-//                    comment: this.comment,
-//
-//                });
                 this.setWorkMode({workMode: 'none'});
             },
             closeButtonClick () {
