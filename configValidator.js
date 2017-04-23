@@ -95,13 +95,13 @@ module.exports = {
                     message: 'type ' + type.name + ' has field without name!'
                 };
 
-            if (type.fields.filter((field) => {
-                    return field.required;
-                }).length == 0)
-                return {
-                    success: false,
-                    message: 'type ' + type.name + ' has all fields without required flag! At least one field must be required'
-                };
+            // if (type.fields.filter((field) => {
+            //         return field.required;
+            //     }).length == 0)
+            //     return {
+            //         success: false,
+            //         message: 'type ' + type.name + ' has all fields without required flag! At least one field must be required'
+            //     };
 
             if (type.fields.filter((field) => {
                     return !field.name

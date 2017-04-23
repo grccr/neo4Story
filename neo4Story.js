@@ -1,11 +1,12 @@
-var config = require('./public/config.js');
+
 var express = require('express');
 var app = express();
 app.use(express.static('public'));
 var configValidator = require('./configValidator');
 var configPreparer = require('./configPreparer');
-
-const port = 8081;
+var argv = require('minimist')(process.argv.slice(2));
+var config = require(argv['c'] || './public/config.js');
+const port = argv['p'] || 8081;
 
 app.get('/config', function (req, res) {
     config.nodeTypes = configPreparer.prepareNodeTypes(config.nodeTypes);
