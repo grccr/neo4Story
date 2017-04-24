@@ -28,6 +28,8 @@ module.exports = {
                     required: true,         // required in create/edit process, Default - false
                 }
             ],
+            conSearchFields: ['name'],
+            swSearchFields: [],
             color: 'teal',    // choose from vuematerial colors, default - blue
             nodeIcon: 'person',   // if you want use custom icon for your type (like mysupericon.png) - put it's png to public/img/custom-icons and write 'custom-icons/mysupericon.png'
             cardIcon: 'person',   // choose from material icons set
@@ -53,7 +55,8 @@ module.exports = {
                 }
             ],
             color: 'brown',
-            searchFields: ['name'],
+            swSearchFields: [],
+            conSearchFields: ['name'],
             nodeIcon: 'factory',
             mainLabelField: 'name',
             pages: [
@@ -71,25 +74,62 @@ module.exports = {
             oriented: false,            // default - false
             allowedLinks: {
                 Person: ['Person']      // if edge is oriented - key will be 'from', list will be the set of options 'to'
-            }
+            },
+            fields: [
+                {
+                    name: 'comment',
+                    alias: 'comment',
+                    editControl: editControls.INPUT
+                }
+            ],
+            pages: [
+                {
+                    title: 'info',
+                    fields: ['comment']
+                }
+            ]
         },
         {
-            value: 'INVOLVED_WITH',
+            value: 'Involved',
             name: 'INVOLVED_WITH',
             oriented: false,
             allowedLinks: {
                 Person: ['Organization']
             },
-            fields: [] //todo
+            fields: [
+                {
+                    name: 'comment',
+                    alias: 'comment',
+                    editControl: editControls.INPUT
+                }
+            ],
+            pages: [
+                {
+                    title: 'info',
+                    fields: ['comment']
+                }
+            ]
         },
         {
-            value: 'CONNECTED_TO',
+            value: 'Connected',
             name: 'CONNECTED_TO',
             oriented: false,
             allowedLinks: {
                 Organization: ['Organization']
             },
-            fields: [] //todo
+            fields: [
+                {
+                    name: 'comment',
+                    alias: 'comment',
+                    editControl: editControls.INPUT
+                }
+            ],
+            pages: [
+                {
+                    title: 'info',
+                    fields: ['comment']
+                }
+            ]
         }
     ]
 

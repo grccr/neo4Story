@@ -17,6 +17,15 @@ module.exports = {
         return nodeTypes;
     },
     prepareEdgeTypes (edgeTypes) {
+        edgeTypes.forEach((type) => {
+
+            type.fields.forEach((field) => {
+                if(!field.required) field.required = false; // direct false definition to escape undefined
+                if(!field.editControl) field.editControl = 'input';
+                if(!field.type) field.type = 'string';
+            });
+
+        });
         return edgeTypes;
     }
 };
