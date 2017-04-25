@@ -50,6 +50,7 @@ node neo4Story.js
 ```
 
 You can use *-c* flag for config-file and *-p* for port binding.
+
 **Note:** only master branch contains artifact of build (dist/build.js)!
 
 #### How to customize neo4Story for your data?
