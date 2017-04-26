@@ -63,5 +63,9 @@ The only step of this process is described in
 
 Always welcome! [Read this section to begin!](DOCS/DEVELOP.md)
 
+#### Contacts
+
+Feel free to communicate with us in #neo4story slack channel!
+
 
 
