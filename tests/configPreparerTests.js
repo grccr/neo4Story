@@ -24,7 +24,9 @@ describe('configPreparation', () => {
                     alias: 'Surname'
                 }
             ],
-            mainLabelField: 'name'
+            mainLabelField: 'name',
+            swSearchFields: ['name'],
+            conSearchFields: ['name']
         }];
         let preparedNodeTypes = configPreparer.prepareNodeTypes(nodeTypesSample);
         expect(configValidator.validateNodeTypes(preparedNodeTypes).success).to.be.true;  // check that valid config is still valid

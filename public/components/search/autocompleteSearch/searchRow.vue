@@ -29,7 +29,7 @@
     export default{
         data() {
             return {
-                searchRequest: this.selectedElement ? (this.selectedElement.name || '') + ' ' + (this.selectedElement.surname || '') : '',
+                searchRequest: this.selectedElement ? (this.selectedElement.label) : '',
                 matches: this.selectedElement ? [this.selectedElement] : [],
                 selection: this.selectedElement ? this.selectedElement : {},
                 current: -1,
@@ -56,6 +56,10 @@
                             });
                 }
                 this.ignoreSearchWatch = false;
+            },
+            selectedElement (newVal, oldVal) {
+                this.ignoreSearchWatch = true;
+                this.searchRequest = newVal ? (newVal.label) : '';
             }
         },
         props: {
@@ -87,7 +91,7 @@
 
                 let types = this.$store.state.appConfig.config.nodeTypes
                                 .filter((type) => {
-                                    console.log(type);
+//                                    console.log(type);
                                     return type.conSearchFields.length > 0 || type.swSearchFields.length > 0;
                                 })
                                 .map((type) => {
