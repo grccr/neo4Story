@@ -15,6 +15,7 @@ const {ADD_NODE_TO_SELECTION, ADD_EDGE_TO_SELECTION } = mutations;
 const {addNodeToSelection, addEdgeToSelection} = actions;
 
 describe('mutations', () => {
+
     it('ADD_NODE_TO_SELECTION', () => {
         // mock state
         const state = {
