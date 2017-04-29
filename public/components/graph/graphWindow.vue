@@ -76,6 +76,7 @@
                 addSubGraphById: 'addSubGraphById'
             }),
             onNodeClick(event) {
+                this.setWorkMode({workMode: 'none'});
                 if (!this.$store.state.edit.selectorNodeActive) {
                     this.resetSelection();
                     this.addNodeToSelection(JSON.parse(JSON.stringify(event.data.node)));
@@ -85,6 +86,7 @@
                     this.addNodeToSelection(JSON.parse(JSON.stringify(event.data.node)));
             },
             onEdgeClick(event) {
+                this.setWorkMode({workMode: 'none'});
                 if (!this.$store.state.edit.selectorEdgeActive) {
                     this.resetSelection();
                     this.addEdgeToSelection(JSON.parse(JSON.stringify(event.data.edge)));

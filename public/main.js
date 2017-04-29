@@ -2,7 +2,6 @@ var Vue = require('vue');
 var VueResource = require('vue-resource');
 var VueRouter = require('vue-router');
 var VueMaterial = require('vue-material');
-
 Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.use(VueMaterial);

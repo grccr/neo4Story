@@ -16,59 +16,65 @@
             <div class="inputs-container">
                 <div class="search-input-container">
                     <label class="autocomlete-input-label">1:</label>
-                    <search-row @elementSelected="onFirstNodeSelected"
+                    <search-row ref="firstSearchRow" @elementSelected="onFirstNodeSelected"
                                 @selectOff="onSelectFirstOff"
                                 class="search-row"
                                 :onlyAutocomplete="true"
                                 :labelActive="false"
                                 :selectedElement="selectedNodes[0]"
-                    > </search-row>
-                    <!--<md-button class="md-mini md-icon-button">-->
-                        <!--<md-icon>location_searching</md-icon>-->
-                    <!--</md-button>-->
+                    ></search-row>
                 </div>
                 <div class="search-input-container">
                     <label class="autocomlete-input-label">2:</label>
-                    <search-row @elementSelected="onSecondNodeSelected"
+                    <search-row ref="secondSearchRow" @elementSelected="onSecondNodeSelected"
                                 @selectOff="onSelectSecondOff"
                                 class="search-row"
                                 :onlyAutocomplete="true"
                                 :selectedElement="selectedNodes[1]"
-                                :labelActive="false"> </search-row>
+                                :labelActive="false"></search-row>
 
                 </div>
                 <div v-if="inputsActivated">
                     <div class="type-select-container">
                         <label for="semantic-type-select" class="semantic-type-select-label">Relationship type:</label>
-                        <md-select :disabled="!inputsActivated" name="semantic-type-select" id="semantic-type-select" v-model="selectedTypeName">
-                            <md-option :disabled="type.from == 1" v-bind:class="{'oriented-type': type.oriented}" v-for="type in availableTypes" :value="type.name" >{{type.value}}</md-option>
+                        <md-select :disabled="!inputsActivated" name="semantic-type-select" id="semantic-type-select"
+                                   v-model="selectedTypeName">
+                            <my-option :disabled="type.from == 1" v-bind:class="{'oriented-type': type.oriented}"
+                                       v-for="type in availableTypes" :value="type.name" @selected="typeSelected(type)">
+                                <div class="text-div">{{type.value}}</div>
+                                <div class="additional-label" v-if="type.orientation == 'reverse'" slot="extras"><md-icon>loop</md-icon></div>
+                            </my-option>
                         </md-select>
                     </div>
-                    <!--<md-input-container class="search-row-container">-->
-                        <!--<md-input :disabled="!inputsActivated" v-model="comment" placeholder="Prooflink"></md-input>-->
-                    <!--</md-input-container>-->
                     <input-card :type-config="selectedType" ref="inputCard" class="input-card"
                                 v-if="selectedType.name"></input-card>
                 </div>
 
             </div>
             <md-button class="md-raised md-primary confirm-button" v-on:click="confirmButtonClicked">Ok, go!</md-button>
+            <md-button class="md-icon-button md-primary swap-button" v-if="selectedType.orientation == 'bidirectional'" v-on:click="swapNodes">
+                <md-icon>loop</md-icon>
+            </md-button>
         </md-card>
     </div>
 </template>
 
 <script type="text/javascript">
     import {mapActions} from "vuex";
+//    import mySelect from "./myAwesomeSelect"
     export default {
         data () {
             return {
-                selectedTypeName: 'friends',
+                selectedTypeName: '',
                 selectedType: {},
                 comment: '',
                 selectedNodes: JSON.parse(JSON.stringify(this.selectedElements)),
-//                ppTypes: [{value: 'friends', name: 'Друзья', oriented: false}, {value: 'collegue', name: 'Collegue', oriented: false}],
-//                pcTypes: [{value: 'host', name: 'Учредитель', oriented: false}, {value: 'client', name: 'Client', oriented: false}],
-//                ccTypes: [{value: 'child', name: 'Дочка', oriented: true}]       // oriented type! todo coloring of oriented types
+                typesMap: {
+                    direct: [],
+                    reverse: [],
+                    undirected: []
+                }
+
             }
         },
         props: {
@@ -82,34 +88,31 @@
                 }
             }
         },
-//        mounted () {
-//            console.log("MOUNT");
-//            this.selectedNodes = JSON.parse(JSON.stringify(this.selectedNodesProp));
-//          this.$nextTick(() => {
-//
-//              console.log(this.selectedNodesProp);
-//
-//          });
-//        },
         components: {
             searchRow: require('../../../search/autocompleteSearch/searchRow.vue'),
-            inputCard: require('./../inputCard.vue')
+            inputCard: require('./../inputCard.vue'),
+            myOption: require('./myAwesomeSelect/myOption.vue')
         },
         computed: {
             inputsActivated () {
                 return this.selectedNodes.length == 2 && this.selectedNodes[0];
             },
             availableTypes () {
-                let include = (arr,obj) => {
+                let include = (arr, obj) => {
                     return (arr.indexOf(obj) != -1);
                 };
                 let toReturn = [];
+                this.typesMap = {
+                    direct: [],
+                    reverse: [],
+                    undirected: []
+                };
                 if (this.selectedNodes.length == 2) {
                     let firstNode = this.selectedNodes[0];
                     let secondNode = this.selectedNodes[1];
                     this.$store.state.appConfig.config.edgeTypes.forEach((edgeType) => {
                         if (edgeType.allowedLinks.hasOwnProperty(firstNode.semantic_type)) {
-                            if (include(edgeType.allowedLinks[firstNode.semantic_type], secondNode.semantic_type)){
+                            if (include(edgeType.allowedLinks[firstNode.semantic_type], secondNode.semantic_type)) {
                                 if (edgeType.oriented) {
                                     toReturn.push({
                                         from: 0,
@@ -118,7 +121,9 @@
                                         name: edgeType.name,
                                         oriented: edgeType.oriented,
                                         fields: edgeType.fields
-                                    });}
+                                    });
+                                    this.typesMap.direct.push(edgeType.name)
+                                }
                                 else {
                                     toReturn.push({
                                         from: '',
@@ -128,12 +133,13 @@
                                         oriented: edgeType.oriented,
                                         fields: edgeType.fields
                                     });
+                                    this.typesMap.undirected.push(edgeType.name)
                                 }
                             }
 
                         }
                         if (edgeType.allowedLinks.hasOwnProperty(secondNode.semantic_type)) {
-                            if (include(edgeType.allowedLinks[secondNode.semantic_type], firstNode.semantic_type)){
+                            if (include(edgeType.allowedLinks[secondNode.semantic_type], firstNode.semantic_type)) {
                                 if (edgeType.oriented) {
                                     toReturn.push({
                                         from: 1,
@@ -142,8 +148,10 @@
                                         name: edgeType.name,
                                         oriented: edgeType.oriented,
                                         fields: edgeType.fields
-                                    });}
-                                else {
+                                    });
+                                    this.typesMap.reverse.push(edgeType.name)
+                                }
+                                else if (firstNode.semantic_type != secondNode.semantic_type) {
                                     toReturn.push({
                                         from: '',
                                         to: '',
@@ -152,21 +160,42 @@
                                         oriented: edgeType.oriented,
                                         fields: edgeType.fields
                                     });
+                                    this.typesMap.undirected.push(edgeType.name)
                                 }
                             }
 
                         }
                     });
-            }
+                }
+                let bidirectional_types = [];
+                toReturn.forEach((type, index, object) => {
+                    if (include(this.typesMap.undirected, type.name)) {type.orientation = 'undirected'}
+                    else if (include(this.typesMap.direct, type.name) && include(this.typesMap.reverse, type.name)){
+                        if (include(bidirectional_types, type.name)) {
+                            object.splice(index, 1);
+                            console.log('POPPING');
+                        }
+                        else {
+                            type.orientation = 'bidirectional';
+                            bidirectional_types.push(type.name);
+                            console.log('ADDING');
+                            console.log(type.name);
+                        }
+                    }
+                    else if (include(this.typesMap.direct, type.name)) {type.orientation = 'direct'}
+                    else if (include(this.typesMap.reverse, type.name)) {type.orientation = 'reverse'}
+                });
                 return toReturn;
-        }},
+            }
+        },
         mounted () {
         },
         watch: {
             selectedTypeName(newVal, oldVal){
                 this.selectedType = this.availableTypes.filter((type) => {
                         return type.name == this.selectedTypeName;
-                    })[0]||{};
+                    })[0] || {};
+                console.log(this.selectedType);
             }
         },
         methods: {
@@ -180,23 +209,32 @@
             onSecondNodeSelected (value) {
                 this.onNodeSelect(1, value);
             },
+            swapNodes () {
+                if (this.selectedNodes.length == 2) {
+                    this.selectedNodes.reverse();
+
+//                    this.$refs.secondSearchRow.$forceUpdate();
+                }
+            },
             onSelectFirstOff () {
-                if(this.selectedNodes.length > 0) this.selectedNodes = this.selectedNodes.splice(0, 1);
+                if (this.selectedNodes.length > 0) this.selectedNodes = this.selectedNodes.splice(0, 1);
             },
             onSelectSecondOff () {
-                if(this.selectedNodes.length > 1) this.selectedNodes = this.selectedNodes.splice(1, 1);
+                if (this.selectedNodes.length > 1) this.selectedNodes = this.selectedNodes.splice(1, 1);
             },
             onNodeSelect(index, value) {
                 if (index == 0) this.selectedNodes[0] = value.selected;
                 if (index == 1) {
-                    if(this.selectedNodes.length == 1)
+                    if (this.selectedNodes.length == 1)
                         this.selectedNodes.push(value.selected);
                     else
                         this.selectedNodes[1] = value.selected;
                 }
             },
-            typeSelected (selected) {
-                console.log(selected);
+            typeSelected (selectedType) {
+                if (selectedType.orientation == 'reverse') {
+                    this.swapNodes()
+                }
             },
             confirmButtonClicked () {
                 let newEdge = this.$refs.inputCard.getData();
@@ -206,8 +244,8 @@
                     newEdge.data.id = newEdge.source + '_' + newEdge.target;
                     newEdge.edgeType = this.selectedTypeName;
                     this.addNewEdge(newEdge);
+                    this.setWorkMode({workMode: 'none'});
                 }
-                this.setWorkMode({workMode: 'none'});
             },
             closeButtonClick () {
                 this.setWorkMode({workMode: 'none'});
@@ -225,6 +263,13 @@
     .confirm-button {
         margin-top: 13px;
         margin-bottom: 10px;
+    }
+
+    .md-icon-button.swap-button {
+        position: absolute;
+        margin-top: 20% !important;
+        margin-left: 85% !important;
+
     }
 
     .link-icon {
@@ -260,6 +305,11 @@
         margin-left: 7px;
         width: 80%;
         display: inline-block;
+    }
+    .additional-label {
+        margin-left: 16px;
+        color: rgba(0,0,0,0.26);
+        font-size: 13px;
     }
 
 </style>

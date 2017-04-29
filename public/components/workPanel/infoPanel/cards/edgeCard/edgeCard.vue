@@ -2,8 +2,8 @@
     <div v-if="typeConfig">
         <md-toolbar class="md-dense" :md-theme="typeConfig.color">
 
-            <!--&lt;!&ndash;<md-icon class="semantic-type-icon"> {{typeConfig.cardIcon}} </md-icon>&ndash;&gt;-->
-            <!--<h3 class="md-title" style="flex: 1"> {{typeConfig.value}} </h3>-->
+            <!--<md-icon class="semantic-type-icon"> {{typeConfig.cardIcon}} </md-icon>-->
+            <h3 class="md-title" style="flex: 1"> {{typeConfig.value}} </h3>
 
 
             <md-button class="md-icon-button" @click="editEdgeClicked">
@@ -11,30 +11,19 @@
                 <md-tooltip md-direction="top">Edit</md-tooltip>
             </md-button>
 
-            <md-button class="md-icon-button" v-on:click="closeButtonClick">
+            <md-button class="md-icon-button close-button" v-on:click="closeButtonClick">
                 <md-icon>close</md-icon>
                 <md-tooltip md-direction="top">Close</md-tooltip>
             </md-button>
         </md-toolbar>
 
-        <md-card class="person-card">
-
-            <md-card-header>
-                <md-card-header-text>
-                    <div class="md-title" v-if="information.label">{{information.label}}</div>
-                    <div class="md-subhead" v-if="information.sublabel">{{information.sublabel}}</div>
-                </md-card-header-text>
-
-                <md-card-media v-if="information.avatar" class="person-avatar">
-                    <img :src="information.avatar">
-                </md-card-media>
-            </md-card-header>
+        <md-card class="edge-card">
 
             <edge-page :information="information" :page="activePage" :editable="editable" :typeConfig="typeConfig"></edge-page>
-            <!--<md-bottom-bar md-shift @change="switchDetails" :md-theme="typeConfig.color">-->
-                <!--<md-bottom-bar-item :md-icon="page.icon" md-active v-for="(page, index) in typeConfig.pages">{{ page.title }}</md-bottom-bar-item>-->
-            <!--</md-bottom-bar>-->
 
+            <md-bottom-bar md-shift @change="switchDetails" :md-theme="typeConfig.color">
+                <md-bottom-bar-item :md-icon="page.icon" md-active v-for="(page, index) in typeConfig.pages">{{ page.title }}</md-bottom-bar-item>
+            </md-bottom-bar>
         </md-card>
     </div>
 </template>
@@ -46,7 +35,8 @@
         data() {
             return {
                 editable: false,
-                activePageIndex: 0
+                activePageIndex: 0,
+                activeHelper
             }
         },
         components: {
@@ -65,7 +55,15 @@
                 return false;
             }
         },
+        watch: {
+            information () {
+                this.activePageIndex = 0;
+            }
+        },
         props: ['information'],
+        created() {
+            console.log(this.activePageIndex);
+        },
         methods: {
             ...mapActions({
                 exploreNode: "exploreNode",
