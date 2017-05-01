@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+const TARGET = process.env.npm_lifecycle_event;
 
 var folder = 'public';
 
@@ -86,19 +87,37 @@ module.exports = {
     cache: true
 };
 
-if (process.env.NODE_ENV === 'production') {
-    module.exports.devtool = '#source-map';
-    module.exports.plugins = (module.exports.plugins || []).concat([
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: '"production"'
-            }
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        }),
-        new webpack.optimize.OccurenceOrderPlugin()
-    ])
+if (TARGET === 'start' || !TARGET) {
+    module.exports = merge(common, {
+        devServer: {
+            port: 9090,
+            proxy: {
+                '/': {
+                    target: 'http://localhost:8081',
+                    secure: false,
+                    prependPath: false
+                }
+            },
+            publicPath: 'http://localhost:4000/',
+            historyApiFallback: true
+        },
+        devtool: 'source-map'
+    });
 }
+
+// if (process.env.NODE_ENV === 'production') {
+//     module.exports.devtool = '#source-map';
+//     module.exports.plugins = (module.exports.plugins || []).concat([
+//         new webpack.DefinePlugin({
+//             'process.env': {
+//                 NODE_ENV: '"production"'
+//             }
+//         }),
+//         new webpack.optimize.UglifyJsPlugin({
+//             compress: {
+//                 warnings: false
+//             }
+//         }),
+//         new webpack.optimize.OccurenceOrderPlugin()
+//     ])
+// }
