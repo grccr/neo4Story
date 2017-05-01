@@ -1,11 +1,12 @@
 var path = require('path');
 var webpack = require('webpack');
+const merge = require('webpack-merge');
 const TARGET = process.env.npm_lifecycle_event;
 
 var folder = 'public';
 
-module.exports = {
-    entry: `./${folder}/main.js`,
+const common = {
+    entry: [`./${folder}/main.js`,'webpack-hot-middleware/client'],
 
     output: {
         path: path.resolve(__dirname, `${folder}/dist`),
@@ -84,10 +85,16 @@ module.exports = {
         noInfo: true
     },
     devtool: '#eval',
-    cache: true
+    cache: true,
+    plugins: [
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin()
+    ]
 };
 
-if (TARGET === 'start' || !TARGET) {
+if (TARGET === 'dev' || TARGET === 'watch' || !TARGET) {
+    console.log(common);
     module.exports = merge(common, {
         devServer: {
             port: 9090,
@@ -98,7 +105,7 @@ if (TARGET === 'start' || !TARGET) {
                     prependPath: false
                 }
             },
-            publicPath: 'http://localhost:4000/',
+            publicPath: 'http://localhost:8081/',
             historyApiFallback: true
         },
         devtool: 'source-map'

@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "watch": "webpack --watch --color",
+    "dev": "webpack-dev-server --hot --inline",
     "test": "webpack --config webpack.config.tests.js \n mocha ./tests/bundles/test-bundles.js",
     "start": "electron ./desktop"
   },
@@ -30,7 +31,8 @@
     "vue-material": "^0.6.3",
     "vue-material-datepicker": "^2.0.1",
     "vue-resource": "^1.2.0",
-    "vue-router": "^2.0.1"
+    "vue-router": "^2.0.1",
+    "webpack-dev-middleware": "^1.10.2"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
