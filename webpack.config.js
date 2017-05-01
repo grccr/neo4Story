@@ -6,10 +6,11 @@ const TARGET = process.env.npm_lifecycle_event;
 var folder = 'public';
 
 const common = {
-    entry: [`./${folder}/main.js`,'webpack-hot-middleware/client'],
-
+    entry: ['webpack-dev-server/client?http://0.0.0.0:9000/', 'webpack/hot/only-dev-server',
+        `./${folder}/main.js`
+        ],
     output: {
-        path: path.resolve(__dirname, `${folder}/dist`),
+        path: path.resolve(__dirname, `${folder}/dist/`),
         publicPath: '/dist/',
         filename: 'build.js'
     },
@@ -81,8 +82,11 @@ const common = {
         plugins: ['transform-runtime','transform-es2015-destructuring', 'transform-object-rest-spread']
     },
     devServer: {
+        port: 9000,
+        host: 'localhost',
         historyApiFallback: true,
-        noInfo: true
+        noInfo: true,
+        contentBase: "./public"
     },
     devtool: '#eval',
     cache: true,
@@ -97,13 +101,17 @@ if (TARGET === 'dev' || TARGET === 'watch' || !TARGET) {
     console.log(common);
     module.exports = merge(common, {
         devServer: {
-            port: 9090,
+            port: 9000,
             proxy: {
                 '/': {
                     target: 'http://localhost:8081',
                     secure: false,
-                    prependPath: false
+                    // prependPath: false
                 }
+            },
+            watchOptions: {
+                aggregateTimeout: 300,
+                poll: 1000
             },
             publicPath: 'http://localhost:8081/',
             historyApiFallback: true

@@ -6,7 +6,17 @@ Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.use(VueMaterial);
 
+// module.hot.accept();
+// __webpack_public_path__ = "http://webpack:8081/";
 console.log(Vue.material);
+
+// if(module.hot) {
+//     module.hot.accept(function(err) {
+//         if(err) {
+//             console.error("Cannot apply hot update", err);
+//         }
+//     });
+// }
 
 // Vue.material.registerTheme('default', {
 //     primary: 'cyan',
@@ -51,17 +61,6 @@ var router = new VueRouter({
             path: '/',
             component: require('./components/mainPage.vue')
         }
-        // {
-        //     path: '/main',
-        //     component: require('./components/mainPage.vue'),
-        //     name: 'mainPage',
-        //     // meta: { requiresAuth: false }
-        // },
-        // {
-        //     path: '/bratva',
-        //     component: require('./components/bratvaPage.vue'),
-        //     name: 'bPage'
-        // }
     ]
 });
 

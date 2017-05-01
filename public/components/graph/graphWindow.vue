@@ -108,12 +108,9 @@
             }
         },
         mounted () {
-            console.log("test3");
-
             this.$nextTick(function () {
                 var self = this;
-                console.log("test");
-                // todo make custom
+                // todo make cust
                 $sigma.canvas.nodes.image.cacheArray(
                         ['img/pig.png', 'img/person.png', 'img/factory.png'],
                         function () {

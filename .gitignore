@@ -10,3 +10,6 @@ public/config.js
 
 public/img/custom-icons
 /public/dist/build.js
+
+**.hot-update**
+**/build.js.map
