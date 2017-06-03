@@ -1,4 +1,4 @@
-# neo4Story [![Build Status](https://travis-ci.org/EmpireFallsTechnologies/neo4Story.svg?branch=master)](https://travis-ci.org/EmpireFallsTechnologies/neo4Story)
+# neo4Story [![Build Status](https://travis-ci.org/forwardmomentum/neo4Story.svg?branch=master)](https://travis-ci.org/forwardmomentum/neo4Story)
 
 ### *Take data, put it in Neo4J, tell your story.*
 
